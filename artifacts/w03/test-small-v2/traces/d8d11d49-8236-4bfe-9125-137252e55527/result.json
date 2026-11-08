@@ -1,0 +1,22 @@
+{
+  "status": "clarify",
+  "reason": "请提供有效订单数的统计时间范围（开始和结束日期）。“青禾”按当前数据集处理，不会自动作为门店筛选条件。",
+  "intent": {
+    "status": "clarify",
+    "reason": "请提供有效订单数的统计时间范围（开始和结束日期）。“青禾”按当前数据集处理，不会自动作为门店筛选条件。",
+    "metrics": [
+      "valid_order_count"
+    ],
+    "group_by": [],
+    "filters": []
+  },
+  "question": "青禾的有效订单数是多少？",
+  "trace_id": "d8d11d49-8236-4bfe-9125-137252e55527",
+  "elapsed_seconds": 3.531,
+  "model_usage": {
+    "prompt_tokens": 11403,
+    "completion_tokens": 511,
+    "total_tokens": 11914
+  },
+  "model_calls_with_usage": 1
+}

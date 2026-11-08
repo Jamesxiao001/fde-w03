@@ -1,0 +1,22 @@
+{
+  "message": {
+    "role": "assistant",
+    "content": "",
+    "tool_calls": [
+      {
+        "index": 0,
+        "id": "call_00_DvXGeP4EGqfjChouQDxK5864",
+        "type": "function",
+        "function": {
+          "name": "show_evidence",
+          "arguments": "{\"claim_ids\": [\"CLM-001-0001\", \"CLM-001-0002\", \"CLM-001-0003\", \"CLM-001-0004\", \"CLM-001-0005\", \"CLM-001-0007\", \"CLM-001-0008\", \"CLM-001-0009\", \"CLM-001-0011\", \"CLM-001-0012\", \"CLM-001-0013\", \"CLM-001-0014\", \"CLM-001-0016\", \"CLM-001-0017\", \"CLM-001-0018\", \"CLM-001-0019\", \"CLM-001-0020\", \"CLM-001-0021\", \"CLM-001-0022\", \"CLM-001-0023\", \"CLM-001-0027\"]}"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "prompt_tokens": 22415,
+    "completion_tokens": 504,
+    "total_tokens": 22919
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "payment_cents",
+      "refund_cents",
+      "net_sales_cents",
+      "gross_cents",
+      "discount_cents"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  SUM(CASE WHEN status = 'paid' THEN paid_cents ELSE 0 END) AS payment_cents\n  , SUM(CASE WHEN status = 'paid' THEN refund_cents ELSE 0 END) AS refund_cents\n  , SUM(CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END) AS net_sales_cents\n  , SUM(CASE WHEN status = 'paid' THEN gross_cents ELSE 0 END) AS gross_cents\n  , SUM(CASE WHEN status = 'paid' THEN gross_cents - paid_cents ELSE 0 END) AS discount_cents\nFROM \"data\".\"main\".\"orders\" orders_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+  "columns": [
+    "payment_cents",
+    "refund_cents",
+    "net_sales_cents",
+    "gross_cents",
+    "discount_cents"
+  ],
+  "rows": [
+    [
+      119050,
+      18750,
+      100300,
+      124250,
+      5200
+    ]
+  ],
+  "seconds": 0.031,
+  "units": {
+    "payment_cents": "cents",
+    "refund_cents": "cents",
+    "net_sales_cents": "cents",
+    "gross_cents": "cents",
+    "discount_cents": "cents"
+  },
+  "data_version": "qinghe-w03-20260923-small",
+  "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+  "catalog_sha256": "8ea06edeaed98ebb4be2aec3fef0c1d457c85aaacf522fd1b2fd3dcc75b4d175",
+  "answer": "2026年8月（按订单归属日期统计，区间为2026-08-01至2026-09-01）青禾的汇总结果为：实付金额1,190.50元，退款金额187.50元，净销售额1,003.00元，支付订单原价金额1,242.50元，优惠金额52.00元。统计口径为已支付订单：实付金额尚未扣退款；退款金额按原订单下单日期归属，不是按现金退款发生日；净销售额为实付金额减退款金额，取消单不计；优惠金额为支付订单原价减实付金额，退款不冲减原优惠金额。本次为单一汇总结果，没有按门店或地区分组，也没有额外的门店筛选条件；数据为合成测试数据，覆盖至2026-09-01。",
+  "question": "2026 年 8 月青禾的实付金额、退款金额、净销售额、支付订单原价金额和优惠金额分别是多少？",
+  "trace_id": "a08ac6a9-cb58-4dde-8ed0-ce6b5ef33a67",
+  "elapsed_seconds": 10.703,
+  "model_usage": {
+    "prompt_tokens": 15048,
+    "completion_tokens": 1177,
+    "total_tokens": 16225
+  },
+  "model_calls_with_usage": 2
+}

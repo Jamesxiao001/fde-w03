@@ -1,0 +1,50 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "buyer_count",
+      "refund_buyer_count",
+      "selling_store_count",
+      "valid_order_items"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  COUNT(DISTINCT CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN member_id END) AS buyer_count\n  , COUNT(DISTINCT CASE WHEN status = 'paid' AND refund_cents > 0 THEN member_id END) AS refund_buyer_count\n  , COUNT(DISTINCT CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN store_id END) AS selling_store_count\n  , SUM(CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN quantity ELSE 0 END) AS valid_order_items\nFROM \"data\".\"main\".\"order_facts\" order_facts_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+  "columns": [
+    "buyer_count",
+    "refund_buyer_count",
+    "selling_store_count",
+    "valid_order_items"
+  ],
+  "rows": [
+    [
+      16504,
+      4173,
+      24,
+      120210
+    ]
+  ],
+  "seconds": 0.141,
+  "units": {
+    "buyer_count": "count",
+    "refund_buyer_count": "count",
+    "selling_store_count": "count",
+    "valid_order_items": "items"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "2d0f316b286de6e5958ff9d5c09e21fc8bf0ca11e598484f9526f1960c9ddaff",
+  "answer": "2026 年 8 月（按 8 月 1 日至 9 月 1 日窗口统计，青禾当前客户数据范围内）：购买会员数为 16,504 个 CRM 会员账户；退款会员数为 4,173 个 CRM 会员账户；成交门店数为 24 家；有效订单商品件数为 120,210 件。口径上，购买会员数按窗口内有有效订单的不同 CRM 会员账户统计，不做跨系统自然人去重；退款会员数按发生退款的已支付订单关联的不同 CRM 会员账户统计；成交门店数按至少有一笔有效订单的不同订单归属门店统计；有效订单商品件数为有效订单中的原始购买件数合计，并非扣除退款后的净商品销量，退款金额也不能用于推算退货件数。本次结果基于合成测试数据覆盖范围，未额外按门店筛选或分组。",
+  "question": "2026 年 8 月青禾的购买会员数、退款会员数、成交门店数和有效订单商品件数分别是多少？",
+  "trace_id": "001a1d04-a213-4cc6-b2d2-3809cf6b72da",
+  "elapsed_seconds": 14.031,
+  "model_usage": {
+    "prompt_tokens": 315270,
+    "completion_tokens": 861,
+    "total_tokens": 316131
+  },
+  "model_calls_with_usage": 2
+}

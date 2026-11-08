@@ -1,0 +1,50 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "refund_amount_rate",
+      "cancel_rate",
+      "refund_order_rate",
+      "discount_rate"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  CAST(SUM(CASE WHEN status = 'paid' THEN refund_cents ELSE 0 END) AS DOUBLE) / CAST(NULLIF(SUM(CASE WHEN status = 'paid' THEN paid_cents ELSE 0 END), 0) AS DOUBLE) AS refund_amount_rate\n  , CAST(COUNT(DISTINCT CASE WHEN status = 'cancelled' THEN order_id END) AS DOUBLE) / CAST(NULLIF(COUNT(DISTINCT order_id), 0) AS DOUBLE) AS cancel_rate\n  , CAST(COUNT(DISTINCT CASE WHEN status = 'paid' AND refund_cents > 0 THEN order_id END) AS DOUBLE) / CAST(NULLIF(COUNT(DISTINCT CASE WHEN status = 'paid' THEN order_id END), 0) AS DOUBLE) AS refund_order_rate\n  , CAST(SUM(CASE WHEN status = 'paid' THEN gross_cents - paid_cents ELSE 0 END) AS DOUBLE) / CAST(NULLIF(SUM(CASE WHEN status = 'paid' THEN gross_cents ELSE 0 END), 0) AS DOUBLE) AS discount_rate\nFROM \"data\".\"main\".\"order_facts\" order_facts_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+  "columns": [
+    "refund_amount_rate",
+    "cancel_rate",
+    "refund_order_rate",
+    "discount_rate"
+  ],
+  "rows": [
+    [
+      0.09881154920956602,
+      0.07992770943858217,
+      0.1494740843999493,
+      0.10018346677709276
+    ]
+  ],
+  "seconds": 0.156,
+  "units": {
+    "refund_amount_rate": "ratio",
+    "cancel_rate": "ratio",
+    "refund_order_rate": "ratio",
+    "discount_rate": "ratio"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "2d0f316b286de6e5958ff9d5c09e21fc8bf0ca11e598484f9526f1960c9ddaff",
+  "answer": "在青禾当前客户范围内，按 CRM 会员账户口径统计 2026 年 8 月（2026-08-01 至 2026-09-01，不含结束日）的汇总结果如下：退款金额占比为 9.88%，取消率为 7.99%，退款订单率为 14.95%，优惠率为 10.02%。这些比例均按该期间已覆盖订单汇总计算，未按门店或其他维度分组。该结果为本周合成测试库数据，仅代表本次统计范围内的情况，不宜外推至其他期间或客户。",
+  "question": "2026 年 8 月青禾的退款金额占比、取消率、退款订单率和优惠率是多少？",
+  "trace_id": "ab95090f-9964-4cd8-b4d3-47406f70c09e",
+  "elapsed_seconds": 10.531,
+  "model_usage": {
+    "prompt_tokens": 315250,
+    "completion_tokens": 1026,
+    "total_tokens": 316276
+  },
+  "model_calls_with_usage": 2
+}

@@ -1,0 +1,50 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "net_sales_cents"
+    ],
+    "start": "2026-07-01",
+    "end": "2026-08-01",
+    "group_by": [
+      "store"
+    ],
+    "filters": []
+  },
+  "sql": "SELECT\n  store\n  , SUM(__net_sales_cents) AS net_sales_cents\nFROM (\n  SELECT\n    store_id AS store\n    , CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END AS __net_sales_cents\n  FROM \"data\".\"main\".\"orders\" orders_src_10000\n  WHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-07-01' AND '2026-07-31'\n) subq_5\nGROUP BY\n  store",
+  "columns": [
+    "store",
+    "net_sales_cents"
+  ],
+  "rows": [
+    [
+      "S01",
+      12500
+    ],
+    [
+      "S02",
+      10000
+    ],
+    [
+      "S03",
+      9000
+    ]
+  ],
+  "seconds": 0.031,
+  "units": {
+    "net_sales_cents": "cents"
+  },
+  "data_version": "qinghe-w03-20260923-small",
+  "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+  "catalog_sha256": "8ea06edeaed98ebb4be2aec3fef0c1d457c85aaacf522fd1b2fd3dcc75b4d175",
+  "answer": "在青禾当前数据范围内，2026 年 7 月按订单成交门店统计的净销售额合计为 315.00 元；其中 S01 为 125.00 元，S02 为 100.00 元，S03 为 90.00 元。净销售额按已支付订单实付金额减退款后计算，取消单不计，并按原订单下单日期归属。金额已由分换算为元。",
+  "question": "2026 年 7 月青禾按订单成交门店统计的净销售额是多少？",
+  "trace_id": "f5082c6b-1fff-4b67-904b-9df8348e8dbc",
+  "elapsed_seconds": 10.781,
+  "model_usage": {
+    "prompt_tokens": 14612,
+    "completion_tokens": 1017,
+    "total_tokens": 15629
+  },
+  "model_calls_with_usage": 2
+}

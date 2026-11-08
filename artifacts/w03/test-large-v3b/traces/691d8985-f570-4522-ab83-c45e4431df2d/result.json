@@ -1,0 +1,38 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "first_buyer_count"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  COUNT(DISTINCT CASE WHEN valid_order_rank = 1 THEN member_id END) AS first_buyer_count\nFROM \"data\".\"main\".\"order_facts\" order_facts_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+  "columns": [
+    "first_buyer_count"
+  ],
+  "rows": [
+    [
+      15
+    ]
+  ],
+  "seconds": 0.109,
+  "units": {
+    "first_buyer_count": "count"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "2d0f316b286de6e5958ff9d5c09e21fc8bf0ca11e598484f9526f1960c9ddaff",
+  "answer": "2026 年 8 月，在青禾当前客户数据范围内，首次有效订单落入该月查询窗口的 CRM 会员账户为 15 个。统计口径是先用测试覆盖期（2024-09-01 至 2026-09-01）的历史订单判断账户首次有效订单，再筛选 2026-08-01 至 2026-09-01（不含结束日）内发生首次有效订单的账户，因此表示覆盖期内的首购，不等同于终身首购。人数按 CRM 会员账户统计，未按跨系统自然人去重；结果按当前客户整体汇总，未另做门店拆分。",
+  "question": "2026 年 8 月有多少会员是在青禾第一次下有效订单的？",
+  "trace_id": "691d8985-f570-4522-ab83-c45e4431df2d",
+  "elapsed_seconds": 18.812,
+  "model_usage": {
+    "prompt_tokens": 314819,
+    "completion_tokens": 1564,
+    "total_tokens": 316383
+  },
+  "model_calls_with_usage": 2
+}

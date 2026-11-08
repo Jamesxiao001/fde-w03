@@ -1,0 +1,22 @@
+{
+  "status": "clarify",
+  "reason": "“有效订单数”对应指标 valid_order_count，但问题未提供统计时间范围。请补充起止日期（end 不含），例如 2026-08-01 至 2026-09-01；当前数据覆盖范围为 2024-09-01 至 2026-09-01。",
+  "intent": {
+    "status": "clarify",
+    "reason": "“有效订单数”对应指标 valid_order_count，但问题未提供统计时间范围。请补充起止日期（end 不含），例如 2026-08-01 至 2026-09-01；当前数据覆盖范围为 2024-09-01 至 2026-09-01。",
+    "metrics": [
+      "valid_order_count"
+    ],
+    "group_by": [],
+    "filters": []
+  },
+  "question": "青禾的有效订单数是多少？",
+  "trace_id": "5fbb43ae-7bb7-43d9-b5f4-d7341e22e224",
+  "elapsed_seconds": 2.359,
+  "model_usage": {
+    "prompt_tokens": 13137,
+    "completion_tokens": 239,
+    "total_tokens": 13376
+  },
+  "model_calls_with_usage": 1
+}

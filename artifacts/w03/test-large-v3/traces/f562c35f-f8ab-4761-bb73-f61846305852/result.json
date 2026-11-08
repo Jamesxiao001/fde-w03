@@ -1,0 +1,10 @@
+{
+  "status": "error",
+  "code": "MODEL_HTTP_402",
+  "reason": "本次调用未完成，请查看运行记录；不能把失败当成零。",
+  "question": "2026 年 8 月青禾按成交门店所在地区统计的有效订单数是多少？",
+  "trace_id": "f562c35f-f8ab-4761-bb73-f61846305852",
+  "elapsed_seconds": 0.594,
+  "model_usage": {},
+  "model_calls_with_usage": 0
+}

@@ -1,0 +1,10 @@
+{
+  "status": "error",
+  "code": "MODEL_HTTP_402",
+  "reason": "本次调用未完成，请查看运行记录；不能把失败当成零。",
+  "question": "2026 年 8 月青禾按会员归属门店统计的购买会员数是多少？",
+  "trace_id": "6f254738-e18d-4401-830d-57f1f185ff32",
+  "elapsed_seconds": 0.594,
+  "model_usage": {},
+  "model_calls_with_usage": 0
+}

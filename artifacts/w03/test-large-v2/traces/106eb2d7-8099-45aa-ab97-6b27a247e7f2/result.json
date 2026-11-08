@@ -1,0 +1,38 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "net_sales_cents"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  SUM(CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END) AS net_sales_cents\nFROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+  "columns": [
+    "net_sales_cents"
+  ],
+  "rows": [
+    [
+      513921320
+    ]
+  ],
+  "seconds": 0.031,
+  "units": {
+    "net_sales_cents": "cents"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+  "answer": "青禾在 2026 年 8 月（按下单日期归属）扣除退款后的净销售额为 5,139,213.20 元。计算口径为：已支付订单的实付金额减退款金额，取消订单不计入。统计范围为当前青禾客户数据。",
+  "question": "青禾 2026 年 8 月一共卖了多少钱？我说的是扣掉退款以后的净额。",
+  "trace_id": "106eb2d7-8099-45aa-ab97-6b27a247e7f2",
+  "elapsed_seconds": 10.219,
+  "model_usage": {
+    "prompt_tokens": 313042,
+    "completion_tokens": 288,
+    "total_tokens": 313330
+  },
+  "model_calls_with_usage": 2
+}

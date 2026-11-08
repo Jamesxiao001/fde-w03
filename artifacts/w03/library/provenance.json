@@ -1,0 +1,360 @@
+{
+  "batches": [
+    {
+      "skill_sha256": "c14af102cddcf145badc12ec2e3e45b0e9a51766c5d5b2a675c0464ebb5bab74",
+      "input_hashes": {
+        "business_model.md": "4b03a6a870cfb0ba78764745a828512d277eb3ea465a0bdde7ac893902d0c897",
+        "00_材料说明.md": "c60776a6a1c030b02b1ce89f773327871c80bb34dca9c486df43c9acb0a6dc28",
+        "01_订单日报说明.md": "976fa129493e6bd2861a58d74df2ba3ad4448ea01a2d25651124222a61cebb67",
+        "02_财务邮件.md": "f81e0ddb5c03dd4eb2d01094816716d8375d03fe883b947ec8297edf8d525557",
+        "03_会员运营周报.md": "25ab933556bf34bef21b528d4c7838c9baad33ae289d59f09501e765080bb492",
+        "04_本期统计确认邮件.md": "c4f847fd90fd0765d37ad22f20d4a4eb0bab90f8543ae0f05d7a3cbee104c4be",
+        "05_数据字典.md": "b4c905ae6d2f4c08e139c695a2868b66ee5047b2b8ea94d6eccba55aebb79c16",
+        "06_任务清单.md": "ed414526217320c5e9ef049cfc1cfb56b670a5af57a57a9450a1e264cd71904d",
+        "07_客户内部沟通.md": "916d0f6d78033aff30dc6053cb58d774bfdefe5e3aa9a4e36ca54f143af3b425",
+        "08_业务目标与工作清单.md": "de9d737c423cc31b2f9d60c9ba8693b9d4257a3aa69b9efedb52674aeb2efe97"
+      },
+      "defined": [
+        "order_count",
+        "paid_order_count",
+        "valid_order_count",
+        "cancelled_order_count",
+        "refund_order_count",
+        "partial_refund_order_count",
+        "full_refund_order_count",
+        "payment_cents",
+        "refund_cents",
+        "net_sales_cents",
+        "gross_cents",
+        "discount_cents",
+        "buyer_count",
+        "refund_buyer_count",
+        "selling_store_count",
+        "valid_order_items",
+        "avg_order_value",
+        "avg_buyer_value",
+        "purchase_frequency",
+        "refund_amount_rate",
+        "cancel_rate",
+        "refund_order_rate",
+        "discount_rate",
+        "items_per_order",
+        "new_member_count",
+        "first_buyer_count",
+        "first_order_sales_cents",
+        "first_order_count",
+        "repeat_order_count",
+        "monthly_buyer_count",
+        "monthly_repeat_buyer_count",
+        "monthly_repeat_rate",
+        "monthly_paid_buyer_count",
+        "monthly_paid_order_count",
+        "monthly_paid_sales_cents",
+        "monthly_paid_repeat_buyer_count",
+        "monthly_paid_repeat_rate",
+        "monthly_paid_avg_order_value"
+      ],
+      "unresolved": [],
+      "business_model_usage": [
+        {
+          "quote": "计入：悦享年卡、家庭季卡（MSG-04489）。表述为“计入范围”，不是“只有这两种卡存在”。",
+          "used_for": [
+            {
+              "kind": "derived_model",
+              "name": "order_facts"
+            },
+            {
+              "kind": "derived_model",
+              "name": "valid_order_month_facts"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_buyer_count"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_order_count"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_sales_cents"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_repeat_buyer_count"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_repeat_rate"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_avg_order_value"
+            }
+          ]
+        },
+        {
+          "quote": "- 不计入：异业联名卡——即使收费也由合作方经营，不进本次自营会员范围（MSG-04489；理由为原话，未另作核实结论）。\n- 不计入：体验卡，与购卡金额无关（MSG-04489；测试数据中 0、100、500 分的体验卡均不计入）。",
+          "used_for": [
+            {
+              "kind": "derived_model",
+              "name": "order_facts"
+            },
+            {
+              "kind": "derived_model",
+              "name": "valid_order_month_facts"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_buyer_count"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_order_count"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_sales_cents"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_repeat_buyer_count"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_repeat_rate"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_avg_order_value"
+            }
+          ]
+        },
+        {
+          "quote": "判定日账户名下至少有一张悦享年卡或家庭季卡有效，该账户即有资格；同一账户即使有多张计入范围内的有效卡，也只算一个有资格账户，不按卡数重复算人（小林 MSG-04493、陈姐 MSG-04504）。",
+          "used_for": [
+            {
+              "kind": "derived_model",
+              "name": "order_facts"
+            },
+            {
+              "kind": "derived_model",
+              "name": "valid_order_month_facts"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_buyer_count"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_order_count"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_sales_cents"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_repeat_buyer_count"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_repeat_rate"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_avg_order_value"
+            }
+          ]
+        },
+        {
+          "quote": "合并表述（FDE 定）：卡在判定日 D 有效，当且仅当 生效日 ≤ D，且 D 早于计划到期日与提前终止日中较早的一个；提前终止为空时只看计划到期日，且不因此视为无限期。",
+          "used_for": [
+            {
+              "kind": "derived_model",
+              "name": "order_facts"
+            },
+            {
+              "kind": "derived_model",
+              "name": "valid_order_month_facts"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_buyer_count"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_order_count"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_sales_cents"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_repeat_buyer_count"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_repeat_rate"
+            },
+            {
+              "kind": "metric",
+              "name": "monthly_paid_avg_order_value"
+            }
+          ]
+        },
+        {
+          "quote": "订单成交门店与会员归属门店是两种不同关系；说“按门店看”之前须先讲清是哪一种，否则两边对不上（MSG-04495）。",
+          "used_for": [
+            {
+              "kind": "semantic_model",
+              "name": "order_facts"
+            },
+            {
+              "kind": "dimension",
+              "name": "store"
+            },
+            {
+              "kind": "dimension",
+              "name": "home_store"
+            },
+            {
+              "kind": "metric",
+              "name": "order_count"
+            },
+            {
+              "kind": "metric",
+              "name": "paid_order_count"
+            },
+            {
+              "kind": "metric",
+              "name": "valid_order_count"
+            },
+            {
+              "kind": "metric",
+              "name": "cancelled_order_count"
+            },
+            {
+              "kind": "metric",
+              "name": "refund_order_count"
+            },
+            {
+              "kind": "metric",
+              "name": "partial_refund_order_count"
+            },
+            {
+              "kind": "metric",
+              "name": "full_refund_order_count"
+            },
+            {
+              "kind": "metric",
+              "name": "payment_cents"
+            },
+            {
+              "kind": "metric",
+              "name": "refund_cents"
+            },
+            {
+              "kind": "metric",
+              "name": "net_sales_cents"
+            },
+            {
+              "kind": "metric",
+              "name": "gross_cents"
+            },
+            {
+              "kind": "metric",
+              "name": "discount_cents"
+            },
+            {
+              "kind": "metric",
+              "name": "buyer_count"
+            },
+            {
+              "kind": "metric",
+              "name": "refund_buyer_count"
+            },
+            {
+              "kind": "metric",
+              "name": "selling_store_count"
+            },
+            {
+              "kind": "metric",
+              "name": "valid_order_items"
+            },
+            {
+              "kind": "metric",
+              "name": "avg_order_value"
+            },
+            {
+              "kind": "metric",
+              "name": "avg_buyer_value"
+            },
+            {
+              "kind": "metric",
+              "name": "purchase_frequency"
+            },
+            {
+              "kind": "metric",
+              "name": "refund_amount_rate"
+            },
+            {
+              "kind": "metric",
+              "name": "cancel_rate"
+            },
+            {
+              "kind": "metric",
+              "name": "refund_order_rate"
+            },
+            {
+              "kind": "metric",
+              "name": "discount_rate"
+            },
+            {
+              "kind": "metric",
+              "name": "items_per_order"
+            },
+            {
+              "kind": "metric",
+              "name": "first_buyer_count"
+            },
+            {
+              "kind": "metric",
+              "name": "first_order_sales_cents"
+            },
+            {
+              "kind": "metric",
+              "name": "first_order_count"
+            },
+            {
+              "kind": "metric",
+              "name": "repeat_order_count"
+            }
+          ]
+        },
+        {
+          "quote": "建模选择（FDE 定）：门店不作为单一对象处理，而区分“成交门店关系”与“会员归属门店关系”；哪种关系用于统计，见第 5 节未决。",
+          "used_for": [
+            {
+              "kind": "derived_model",
+              "name": "order_facts"
+            },
+            {
+              "kind": "semantic_model",
+              "name": "stores"
+            },
+            {
+              "kind": "semantic_model",
+              "name": "member_home_stores"
+            },
+            {
+              "kind": "semantic_model",
+              "name": "order_facts"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

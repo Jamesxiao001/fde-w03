@@ -1,0 +1,16 @@
+{
+  "status": "error",
+  "code": "NATIVE_QUERY_FAILED",
+  "reason": "Got error(s) during query resolution.\n\nError #1:\n  Message:\n\n    The given input does not match any of the available group-by-items for\n    SimpleMetric('net_sales_cents'). Common issues are:\n\n      * Incorrect names.\n      * No valid join paths exist from the measure to the group-by-item.\n        (fan-out join support is pending).\n      * There are multiple matching join paths.\n        (disambiguation support is pending).\n\n    Suggestions:\n      [\n        'order__store',\n        'member__home_store',\n        'store',\n        'store__store_name',\n        'member__home_store__region',\n        'member__home_store__store_name',\n      ]\n\n  Query Input:\n\n    home_store\n\n  Issue Location:\n\n    [Resolve Query(['net_sales_cents'])]\n      -> [Resolve SimpleMetric('net_sales_cents')]",
+  "intent": {
+    "metrics": [
+      "net_sales_cents"
+    ],
+    "start": "2026-07-01",
+    "end": "2026-08-01",
+    "group_by": [
+      "home_store"
+    ],
+    "filters": []
+  }
+}

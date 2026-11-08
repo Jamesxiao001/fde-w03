@@ -1,0 +1,10 @@
+{
+  "status": "error",
+  "code": "MODEL_HTTP_402",
+  "reason": "本次调用未完成，请查看运行记录；不能把失败当成零。",
+  "question": "2026 年 7 月青禾当月下了两单及以上有效订单的会员有多少个？",
+  "trace_id": "723d4569-7399-4e45-85e9-cb534839b18a",
+  "elapsed_seconds": 0.593,
+  "model_usage": {},
+  "model_calls_with_usage": 0
+}

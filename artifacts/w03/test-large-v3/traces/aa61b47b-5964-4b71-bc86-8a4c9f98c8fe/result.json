@@ -1,0 +1,134 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "new_member_count"
+    ],
+    "start": "2026-07-01",
+    "end": "2026-08-01",
+    "group_by": [
+      "home_store"
+    ],
+    "filters": []
+  },
+  "sql": "SELECT\n  home_store_id AS home_store\n  , COUNT(DISTINCT member_id) AS new_member_count\nFROM \"data\".\"main\".\"members\" members_src_10000\nWHERE DATE_TRUNC('day', registered_at) BETWEEN '2026-07-01' AND '2026-07-31'\nGROUP BY\n  home_store_id",
+  "columns": [
+    "home_store",
+    "new_member_count"
+  ],
+  "rows": [
+    [
+      "S11",
+      1
+    ],
+    [
+      "S16",
+      3
+    ],
+    [
+      "S24",
+      4
+    ],
+    [
+      "S01",
+      3
+    ],
+    [
+      "S07",
+      2
+    ],
+    [
+      "S03",
+      3
+    ],
+    [
+      "S04",
+      6
+    ],
+    [
+      "S15",
+      7
+    ],
+    [
+      "S08",
+      6
+    ],
+    [
+      "S21",
+      3
+    ],
+    [
+      "S20",
+      4
+    ],
+    [
+      "S22",
+      3
+    ],
+    [
+      "S06",
+      1
+    ],
+    [
+      "S09",
+      2
+    ],
+    [
+      "S10",
+      4
+    ],
+    [
+      "S14",
+      4
+    ],
+    [
+      "S05",
+      5
+    ],
+    [
+      "S19",
+      1
+    ],
+    [
+      "S23",
+      3
+    ],
+    [
+      "S17",
+      6
+    ],
+    [
+      "S12",
+      2
+    ],
+    [
+      "S13",
+      5
+    ],
+    [
+      "S02",
+      3
+    ],
+    [
+      "S18",
+      3
+    ]
+  ],
+  "seconds": 0.031,
+  "units": {
+    "new_member_count": "count"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "2d0f316b286de6e5958ff9d5c09e21fc8bf0ca11e598484f9526f1960c9ddaff",
+  "answer": "2026 年 7 月，青禾按会员归属门店统计的注册会员数合计为 84 个 CRM 会员账户。该口径按注册日期统计当月新注册账户，并按会员归属门店分组；表中列出的 24 家归属门店均有对应数据，合计 84。注册会员账户数不等于跨系统去重后的自然人数。",
+  "question": "2026 年 7 月青禾按会员归属门店统计的注册会员数是多少？",
+  "trace_id": "aa61b47b-5964-4b71-bc86-8a4c9f98c8fe",
+  "elapsed_seconds": 14.562,
+  "model_usage": {
+    "prompt_tokens": 314940,
+    "completion_tokens": 964,
+    "total_tokens": 315904
+  },
+  "model_calls_with_usage": 2
+}

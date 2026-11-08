@@ -1,0 +1,42 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "valid_order_count",
+      "avg_order_value"
+    ],
+    "start": "2026-05-01",
+    "end": "2026-06-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "WITH sma_10005_cte AS (\n  SELECT\n    DATE_TRUNC('day', ordered_at) AS metric_time__day\n    , CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN 1 ELSE 0 END AS __valid_order_count\n    , CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END AS __net_sales_cents\n  FROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\n)\n\nSELECT\n  MAX(subq_8.valid_order_count) AS valid_order_count\n  , MAX(subq_15.avg_order_value) AS avg_order_value\nFROM (\n  SELECT\n    SUM(__valid_order_count) AS valid_order_count\n  FROM sma_10005_cte\n  WHERE metric_time__day BETWEEN '2026-05-01' AND '2026-05-31'\n) subq_8\nCROSS JOIN (\n  SELECT\n    CAST(SUM(__net_sales_cents) AS DOUBLE) / CAST(NULLIF(SUM(__valid_order_count), 0) AS DOUBLE) AS avg_order_value\n  FROM sma_10005_cte\n  WHERE metric_time__day BETWEEN '2026-05-01' AND '2026-05-31'\n) subq_15",
+  "columns": [
+    "valid_order_count",
+    "avg_order_value"
+  ],
+  "rows": [
+    [
+      23289,
+      17103.172270170468
+    ]
+  ],
+  "seconds": 0.047,
+  "units": {
+    "valid_order_count": "count",
+    "avg_order_value": "cents_per_order"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+  "answer": "2026年5月（5月1日至5月31日）青禾范围内：有效订单数为 23,289 单；有效订单均额为 171.03 元/单。有效订单按已支付且实付金额减退款金额大于零统计，取消和全退不计；有效订单均额为净销售额除以有效订单数，本期分母非零，因此均额有定义。以上为当前合成测试数据范围内的结果。",
+  "question": "2026 年 5 月青禾的有效订单数和有效订单均额是多少？",
+  "trace_id": "2dcdef80-7d3c-45be-960e-398b0b4708aa",
+  "elapsed_seconds": 13.625,
+  "model_usage": {
+    "prompt_tokens": 313145,
+    "completion_tokens": 780,
+    "total_tokens": 313925
+  },
+  "model_calls_with_usage": 2
+}

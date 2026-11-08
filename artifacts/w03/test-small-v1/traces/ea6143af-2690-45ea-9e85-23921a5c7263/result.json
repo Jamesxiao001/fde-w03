@@ -1,0 +1,46 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "refund_order_count",
+      "partial_refund_order_count",
+      "full_refund_order_count"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  SUM(CASE WHEN status = 'paid' AND refund_cents > 0 THEN 1 ELSE 0 END) AS refund_order_count\n  , SUM(CASE WHEN status = 'paid' AND refund_cents > 0 AND refund_cents < paid_cents THEN 1 ELSE 0 END) AS partial_refund_order_count\n  , SUM(CASE WHEN status = 'paid' AND paid_cents > 0 AND refund_cents = paid_cents THEN 1 ELSE 0 END) AS full_refund_order_count\nFROM \"data\".\"main\".\"orders\" orders_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+  "columns": [
+    "refund_order_count",
+    "partial_refund_order_count",
+    "full_refund_order_count"
+  ],
+  "rows": [
+    [
+      4,
+      1,
+      3
+    ]
+  ],
+  "seconds": 0.031,
+  "units": {
+    "refund_order_count": "count",
+    "partial_refund_order_count": "count",
+    "full_refund_order_count": "count"
+  },
+  "data_version": "qinghe-w03-20260923-small",
+  "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+  "catalog_sha256": "8ea06edeaed98ebb4be2aec3fef0c1d457c85aaacf522fd1b2fd3dcc75b4d175",
+  "answer": "2026 年 8 月，青禾当前已加载的 CRM 会员账户范围内：退款订单数为 4 单，其中部分退款订单数 1 单，全额退款订单数 3 单。统计时间为 2026-08-01 至 2026-08-31（按 8 月整月），按订单计数，未按门店分组。口径为已支付且退款金额大于 0 的订单；部分退款为退款金额大于 0 且小于实付金额，全额退款为实付金额大于 0 且退款金额等于实付金额。结果来自本周合成测试库，仅反映当前客户已加载数据范围。",
+  "question": "2026 年 8 月青禾的退款订单数、部分退款订单数和全额退款订单数各是多少？",
+  "trace_id": "ea6143af-2690-45ea-9e85-23921a5c7263",
+  "elapsed_seconds": 9.515,
+  "model_usage": {
+    "prompt_tokens": 14814,
+    "completion_tokens": 837,
+    "total_tokens": 15651
+  },
+  "model_calls_with_usage": 2
+}

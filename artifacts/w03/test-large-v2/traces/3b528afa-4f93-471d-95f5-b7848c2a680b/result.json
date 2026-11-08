@@ -1,0 +1,42 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "valid_order_count",
+      "avg_order_value"
+    ],
+    "start": "2026-05-01",
+    "end": "2026-06-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "WITH sma_10005_cte AS (\n  SELECT\n    DATE_TRUNC('day', ordered_at) AS metric_time__day\n    , CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN 1 ELSE 0 END AS __valid_order_count\n    , CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END AS __net_sales_cents\n  FROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\n)\n\nSELECT\n  MAX(subq_8.valid_order_count) AS valid_order_count\n  , MAX(subq_15.avg_order_value) AS avg_order_value\nFROM (\n  SELECT\n    SUM(__valid_order_count) AS valid_order_count\n  FROM sma_10005_cte\n  WHERE metric_time__day BETWEEN '2026-05-01' AND '2026-05-31'\n) subq_8\nCROSS JOIN (\n  SELECT\n    CAST(SUM(__net_sales_cents) AS DOUBLE) / CAST(NULLIF(SUM(__valid_order_count), 0) AS DOUBLE) AS avg_order_value\n  FROM sma_10005_cte\n  WHERE metric_time__day BETWEEN '2026-05-01' AND '2026-05-31'\n) subq_15",
+  "columns": [
+    "valid_order_count",
+    "avg_order_value"
+  ],
+  "rows": [
+    [
+      23289,
+      17103.172270170468
+    ]
+  ],
+  "seconds": 0.047,
+  "units": {
+    "valid_order_count": "count",
+    "avg_order_value": "cents_per_order"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+  "answer": "2026 年 5 月，青禾在已加载的客户数据范围内，有效订单数为 23,289 单；有效订单均额为 17,103.17 分/单，折算 171.03 元/单。统计范围为 2026-05-01 至 2026-06-01，未按门店拆分。有效订单口径为状态已支付、且实付金额减退款金额大于零的订单，取消和全退不计；均额按净销售额除以有效订单数计算，本月有效订单数非零，因此均额已定义。",
+  "question": "2026 年 5 月青禾的有效订单数和有效订单均额是多少？",
+  "trace_id": "3b528afa-4f93-471d-95f5-b7848c2a680b",
+  "elapsed_seconds": 9.328,
+  "model_usage": {
+    "prompt_tokens": 313145,
+    "completion_tokens": 701,
+    "total_tokens": 313846
+  },
+  "model_calls_with_usage": 2
+}

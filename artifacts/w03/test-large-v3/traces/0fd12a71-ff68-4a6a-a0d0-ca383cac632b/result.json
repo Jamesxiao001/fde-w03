@@ -1,0 +1,10 @@
+{
+  "status": "error",
+  "code": "MODEL_HTTP_402",
+  "reason": "本次调用未完成，请查看运行记录；不能把失败当成零。",
+  "question": "青禾的有效订单数是多少？",
+  "trace_id": "0fd12a71-ff68-4a6a-a0d0-ca383cac632b",
+  "elapsed_seconds": 0.75,
+  "model_usage": {},
+  "model_calls_with_usage": 0
+}

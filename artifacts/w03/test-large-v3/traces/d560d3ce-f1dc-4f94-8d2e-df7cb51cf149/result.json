@@ -1,0 +1,10 @@
+{
+  "status": "error",
+  "code": "MODEL_HTTP_402",
+  "reason": "本次调用未完成，请查看运行记录；不能把失败当成零。",
+  "question": "2026 年 8 月 1 日到 8 月 15 日青禾月末付费会员购买人数是多少？",
+  "trace_id": "d560d3ce-f1dc-4f94-8d2e-df7cb51cf149",
+  "elapsed_seconds": 0.671,
+  "model_usage": {},
+  "model_calls_with_usage": 0
+}

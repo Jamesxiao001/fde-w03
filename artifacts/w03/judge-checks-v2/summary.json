@@ -1,0 +1,163 @@
+{
+  "report": "artifacts/w03/test-small-v2/metric_test_report.json",
+  "total": 18,
+  "as_expected": 18,
+  "checks": [
+    {
+      "name": "wrong_metric",
+      "base_case": "c01-order-counts",
+      "should_pass": false,
+      "as_expected": true,
+      "differences": [
+        "intent.metrics"
+      ]
+    },
+    {
+      "name": "wrong_date_same_value",
+      "base_case": "c01-order-counts",
+      "should_pass": false,
+      "as_expected": true,
+      "differences": [
+        "intent.end"
+      ]
+    },
+    {
+      "name": "extra_filter",
+      "base_case": "c01-order-counts",
+      "should_pass": false,
+      "as_expected": true,
+      "differences": [
+        "intent.filters"
+      ]
+    },
+    {
+      "name": "wrong_group_by",
+      "base_case": "c12-net-by-selling-store",
+      "should_pass": false,
+      "as_expected": true,
+      "differences": [
+        "intent.group_by"
+      ]
+    },
+    {
+      "name": "missing_group",
+      "base_case": "c12-net-by-selling-store",
+      "should_pass": false,
+      "as_expected": true,
+      "differences": [
+        "rows"
+      ]
+    },
+    {
+      "name": "duplicate_group",
+      "base_case": "c12-net-by-selling-store",
+      "should_pass": false,
+      "as_expected": true,
+      "differences": [
+        "actual.rows"
+      ]
+    },
+    {
+      "name": "yuan_cents_confusion",
+      "base_case": "c01-order-counts",
+      "should_pass": false,
+      "as_expected": true,
+      "differences": [
+        "units"
+      ]
+    },
+    {
+      "name": "ratio_as_percent",
+      "base_case": "c05-ratios-a",
+      "should_pass": false,
+      "as_expected": true,
+      "differences": [
+        "rows"
+      ]
+    },
+    {
+      "name": "null_to_zero",
+      "base_case": "c14-zero-and-null",
+      "should_pass": false,
+      "as_expected": true,
+      "differences": [
+        "rows"
+      ]
+    },
+    {
+      "name": "tampered_value",
+      "base_case": "c01-order-counts",
+      "should_pass": false,
+      "as_expected": true,
+      "differences": [
+        "rows"
+      ]
+    },
+    {
+      "name": "error_as_ok_with_rows",
+      "base_case": "c01-order-counts",
+      "should_pass": false,
+      "as_expected": true,
+      "differences": [
+        "status"
+      ]
+    },
+    {
+      "name": "wrong_data_version",
+      "base_case": "c01-order-counts",
+      "should_pass": false,
+      "as_expected": true,
+      "differences": [
+        "data_version"
+      ]
+    },
+    {
+      "name": "original_passes",
+      "base_case": "c01-order-counts",
+      "should_pass": true,
+      "as_expected": true,
+      "differences": []
+    },
+    {
+      "name": "row_order_changed",
+      "base_case": "c12-net-by-selling-store",
+      "should_pass": true,
+      "as_expected": true,
+      "differences": []
+    },
+    {
+      "name": "int_vs_float_equal",
+      "base_case": "c01-order-counts",
+      "should_pass": true,
+      "as_expected": true,
+      "differences": []
+    },
+    {
+      "name": "bool_rejected",
+      "base_case": "c01-order-counts",
+      "should_pass": false,
+      "as_expected": true,
+      "differences": [
+        "rows"
+      ]
+    },
+    {
+      "name": "string_number_rejected",
+      "base_case": "c01-order-counts",
+      "should_pass": false,
+      "as_expected": true,
+      "differences": [
+        "rows"
+      ]
+    },
+    {
+      "name": "big_int_off_by_one",
+      "base_case": "合成输入",
+      "should_pass": false,
+      "as_expected": true,
+      "differences": [
+        "rows"
+      ]
+    }
+  ]
+}

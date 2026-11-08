@@ -1,0 +1,9 @@
+{
+  "version": "w02-workflow-0.1.0",
+  "goal": "补齐青禾本期总部运营月报“月末付费会员”资格所需的业务事实，并更新会员、会员卡、账户与门店之间的对象关系：付费资格计入哪些卡产品及其适用范围，会员等级和支付金额与付费资格的关系，一个账户多张卡时如何按账户判断且不重复计人和订单，卡的生效日、计划到期日、提前终止日当天是否有效以及两个结束日期同时存在时以哪个为准，“按门店”统计时成交门店与会员归属门店的区别；保留各角色原话限定、适用范围和确认对象，口径无成文文件、确认人未定等写为未决。阶段交付节点、验收、责任和变更流程属于 SOW，不写入业务模型；报表的统计时间选择和分子分母放进指标定义，不写入业务模型。",
+  "extraction_config": "customer/w02/extraction.json",
+  "skill": "customer/w02/skills/extract-business/SKILL.md",
+  "business_model": "docs/w03/business_model.md",
+  "notes": "docs/w03/interview_notes.md",
+  "max_steps": 24
+}

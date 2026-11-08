@@ -1,0 +1,106 @@
+{
+  "expected": {
+    "status": "ok",
+    "intent": {
+      "metrics": [
+        "net_sales_cents"
+      ],
+      "start": "2026-07-01",
+      "end": "2026-08-01",
+      "group_by": [
+        "store"
+      ],
+      "filters": []
+    },
+    "columns": [
+      "store",
+      "net_sales_cents"
+    ],
+    "rows": [
+      [
+        "S01",
+        12500
+      ],
+      [
+        "S02",
+        10000
+      ],
+      [
+        "S03",
+        9000
+      ]
+    ],
+    "units": {
+      "net_sales_cents": "cents"
+    }
+  },
+  "actual": {
+    "status": "ok",
+    "intent": {
+      "metrics": [
+        "net_sales_cents"
+      ],
+      "start": "2026-07-01",
+      "end": "2026-08-01",
+      "group_by": [
+        "home_store"
+      ],
+      "filters": []
+    },
+    "sql": "SELECT\n  store\n  , SUM(__net_sales_cents) AS net_sales_cents\nFROM (\n  SELECT\n    store_id AS store\n    , CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END AS __net_sales_cents\n  FROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\n  WHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-07-01' AND '2026-07-31'\n) subq_5\nGROUP BY\n  store",
+    "columns": [
+      "store",
+      "net_sales_cents"
+    ],
+    "rows": [
+      [
+        "S03",
+        9000
+      ],
+      [
+        "S01",
+        12500
+      ],
+      [
+        "S02",
+        10000
+      ]
+    ],
+    "seconds": 0.015,
+    "units": {
+      "net_sales_cents": "cents"
+    },
+    "data_version": "qinghe-w03-20260923-small",
+    "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+    "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+    "answer": "按订单成交门店口径统计，青禾在 2026 年 7 月的净销售额合计为 315.00 元。其中：S03 门店 90.00 元，S01 门店 125.00 元，S02 门店 100.00 元。统计口径为已支付订单实付金额减退款，取消单不计，并按原订单下单日期归属到 2026 年 7 月；以上为当前测试数据范围内按订单成交门店分组的合计结果。",
+    "question": "2026 年 7 月青禾按订单成交门店统计的净销售额是多少？",
+    "trace_id": "16d8d2b7-24aa-4d8f-a6e3-f6e773677b42",
+    "elapsed_seconds": 10.015,
+    "model_usage": {
+      "prompt_tokens": 12481,
+      "completion_tokens": 901,
+      "total_tokens": 13382
+    },
+    "model_calls_with_usage": 2
+  },
+  "name": "wrong_group_by",
+  "base_case": "c12-net-by-selling-store",
+  "note": "错分组：成交门店换成归属门店",
+  "should_pass": false,
+  "comparison": {
+    "passed": false,
+    "differences": [
+      {
+        "path": "intent.group_by",
+        "expected": [
+          "store"
+        ],
+        "actual": [
+          "home_store"
+        ]
+      }
+    ]
+  },
+  "as_expected": true
+}

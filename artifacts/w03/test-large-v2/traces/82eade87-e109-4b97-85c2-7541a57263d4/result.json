@@ -1,0 +1,38 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "monthly_paid_buyer_count"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  SUM(CASE WHEN monthly_paid_member_activity_id IS NOT NULL THEN 1 ELSE 0 END) AS monthly_paid_buyer_count\nFROM \"data\".\"main\".\"monthly_paid_member_activity\" monthly_paid_member_activity_src_10000\nWHERE DATE_TRUNC('day', activity_month) BETWEEN '2026-08-01' AND '2026-08-31'",
+  "columns": [
+    "monthly_paid_buyer_count"
+  ],
+  "rows": [
+    [
+      3683
+    ]
+  ],
+  "seconds": 0.047,
+  "units": {
+    "monthly_paid_buyer_count": "count"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+  "answer": "2026年8月，青禾付费会员中，在当月至少有一笔有效订单、且在8月31日名下持有有效悦享年卡或家庭季卡的账户，按账户去重后为 3,683 个。统计范围为完整自然月、全渠道、全门店汇总，不按门店或渠道拆分；付费资格按月末最后一天判定，同一账户持有多张计入范围的卡不重复计数。",
+  "question": "8 月份（2026 年）青禾付费会员里在当月下过有效订单的有几个账户？",
+  "trace_id": "82eade87-e109-4b97-85c2-7541a57263d4",
+  "elapsed_seconds": 11.953,
+  "model_usage": {
+    "prompt_tokens": 313271,
+    "completion_tokens": 1043,
+    "total_tokens": 314314
+  },
+  "model_calls_with_usage": 2
+}

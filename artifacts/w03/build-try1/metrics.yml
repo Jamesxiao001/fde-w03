@@ -1,0 +1,106 @@
+version: 2
+semantic_models:
+- name: order_model
+  model: ref('orders')
+  defaults:
+    agg_time_dimension: ordered_at
+  entities:
+  - name: order
+    type: primary
+    expr: order_id
+  - name: member
+    type: foreign
+    expr: member_id
+  - name: store
+    type: foreign
+    expr: store_id
+  dimensions:
+  - name: ordered_at
+    type: time
+    type_params:
+      time_granularity: day
+  - name: channel
+    type: categorical
+  - name: status
+    type: categorical
+  measures:
+  - name: valid_order_count_measure
+    expr: CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN 1 ELSE
+      0 END
+    agg: sum
+  - name: net_sales_cents_measure
+    expr: CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END
+    agg: sum
+  - name: buyer_count_measure
+    expr: CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN member_id
+      ELSE NULL END
+    agg: count_distinct
+- name: member_model
+  model: ref('members')
+  defaults:
+    agg_time_dimension: registered_at
+  entities:
+  - name: member
+    type: primary
+    expr: member_id
+  - name: home_store
+    type: foreign
+    expr: home_store_id
+  dimensions:
+  - name: registered_at
+    type: time
+    type_params:
+      time_granularity: day
+  - name: tier
+    type: categorical
+  measures: []
+- name: selling_store
+  model: ref('stores')
+  entities:
+  - name: store
+    type: primary
+    expr: store_id
+  dimensions:
+  - name: region
+    type: categorical
+  - name: store_name
+    type: categorical
+  measures: []
+- name: home_store
+  model: ref('stores')
+  entities:
+  - name: home_store
+    type: primary
+    expr: store_id
+  dimensions:
+  - name: region
+    type: categorical
+  - name: store_name
+    type: categorical
+  measures: []
+metrics:
+- name: valid_order_count
+  label: 有效订单数
+  description: 按下单日期统计 paid 状态且实付金额减退款金额大于零的订单数；取消和全退不计。单位：单。
+  type: simple
+  type_params:
+    measure: valid_order_count_measure
+- name: net_sales_cents
+  label: 净销售额
+  description: 按下单日期归属，paid 订单实付金额减退款金额后的合计；取消单不计。单位：分。
+  type: simple
+  type_params:
+    measure: net_sales_cents_measure
+- name: buyer_count
+  label: 购买会员数
+  description: 统计窗口及筛选条件内有有效订单的不同 CRM 会员账户数，不做跨系统自然人去重。单位：账户。
+  type: simple
+  type_params:
+    measure: buyer_count_measure
+- name: avg_order_value
+  label: 有效订单均额
+  description: 净销售额除以有效订单数，单位分／单；分母为零时未定义。
+  type: ratio
+  type_params:
+    numerator: net_sales_cents
+    denominator: valid_order_count

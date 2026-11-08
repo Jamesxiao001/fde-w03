@@ -1,0 +1,38 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "monthly_paid_buyer_count"
+    ],
+    "start": "2026-07-01",
+    "end": "2026-08-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  SUM(CASE WHEN monthly_paid_member_activity_id IS NOT NULL THEN 1 ELSE 0 END) AS monthly_paid_buyer_count\nFROM \"data\".\"main\".\"monthly_paid_member_activity\" monthly_paid_member_activity_src_10000\nWHERE DATE_TRUNC('day', activity_month) BETWEEN '2026-07-01' AND '2026-07-31'",
+  "columns": [
+    "monthly_paid_buyer_count"
+  ],
+  "rows": [
+    [
+      3566
+    ]
+  ],
+  "seconds": 0.031,
+  "units": {
+    "monthly_paid_buyer_count": "count"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+  "answer": "2026 年 7 月青禾的月末付费会员购买人数为 3566 个 CRM 会员账户。统计范围为 2026-07-01 至 2026-07-31 整个自然月，按全渠道、全门店汇总，未按门店或渠道拆分。口径为：当月有至少一笔有效订单，且在月末最后一天账户名下存在有效的悦享年卡或家庭季卡的不同账户数；同一账户持有多张计入范围内的有效卡不重复计算。",
+  "question": "2026 年 7 月青禾月末付费会员购买人数是多少？",
+  "trace_id": "55b3bb01-07ba-426d-9ff9-0135a6a97bdb",
+  "elapsed_seconds": 14.062,
+  "model_usage": {
+    "prompt_tokens": 313257,
+    "completion_tokens": 807,
+    "total_tokens": 314064
+  },
+  "model_calls_with_usage": 2
+}

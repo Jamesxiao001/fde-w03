@@ -1,0 +1,50 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "valid_order_count"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [
+      "store__region"
+    ],
+    "filters": []
+  },
+  "sql": "SELECT\n  stores_src_10000.region AS store__region\n  , COUNT(DISTINCT subq_3.__valid_order_count) AS valid_order_count\nFROM (\n  SELECT\n    store_id AS store\n    , CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN order_id END AS __valid_order_count\n  FROM \"data\".\"main\".\"order_facts\" order_facts_src_10000\n  WHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'\n) subq_3\nLEFT OUTER JOIN\n  \"data\".\"main\".\"stores\" stores_src_10000\nON\n  subq_3.store = stores_src_10000.store_id\nGROUP BY\n  stores_src_10000.region",
+  "columns": [
+    "store__region",
+    "valid_order_count"
+  ],
+  "rows": [
+    [
+      "华东",
+      9907
+    ],
+    [
+      "华南",
+      10040
+    ],
+    [
+      "华北",
+      9986
+    ]
+  ],
+  "seconds": 0.125,
+  "units": {
+    "valid_order_count": "count"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "2d0f316b286de6e5958ff9d5c09e21fc8bf0ca11e598484f9526f1960c9ddaff",
+  "answer": "统计范围为 2026 年 8 月整月（2026-08-01 至 2026-09-01 日界区间），对象为青禾当前测试数据中的有效订单。有效订单按“已支付且实付金额减退款金额大于零”统计，取消和全退不计。按成交门店所在地区汇总：华东 9,907 单、华南 10,040 单、华北 9,986 单。结果仅列出上述三个地区；未列出的地区不能据此判断为零或未定义。数据为合成测试数据。",
+  "question": "2026 年 8 月青禾按成交门店所在地区统计的有效订单数是多少？",
+  "trace_id": "17daf54e-125c-45c2-81d2-416db0aabec8",
+  "elapsed_seconds": 16.25,
+  "model_usage": {
+    "prompt_tokens": 314830,
+    "completion_tokens": 1066,
+    "total_tokens": 315896
+  },
+  "model_calls_with_usage": 2
+}

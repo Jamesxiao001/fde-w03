@@ -1,0 +1,50 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "avg_order_value",
+      "avg_buyer_value",
+      "purchase_frequency",
+      "items_per_order"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  CAST(SUM(CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END) AS DOUBLE) / CAST(NULLIF(COUNT(DISTINCT CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN order_id END), 0) AS DOUBLE) AS avg_order_value\n  , CAST(SUM(CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END) AS DOUBLE) / CAST(NULLIF(COUNT(DISTINCT CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN member_id END), 0) AS DOUBLE) AS avg_buyer_value\n  , CAST(COUNT(DISTINCT CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN order_id END) AS DOUBLE) / CAST(NULLIF(COUNT(DISTINCT CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN member_id END), 0) AS DOUBLE) AS purchase_frequency\n  , CAST(SUM(CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN quantity ELSE 0 END) AS DOUBLE) / CAST(NULLIF(COUNT(DISTINCT CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN order_id END), 0) AS DOUBLE) AS items_per_order\nFROM \"data\".\"main\".\"order_facts\" order_facts_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+  "columns": [
+    "avg_order_value",
+    "avg_buyer_value",
+    "purchase_frequency",
+    "items_per_order"
+  ],
+  "rows": [
+    [
+      17169.054889252664,
+      31139.19777023752,
+      1.813681531749879,
+      4.0159689974275885
+    ]
+  ],
+  "seconds": 0.141,
+  "units": {
+    "avg_order_value": "cents_per_order",
+    "avg_buyer_value": "cents_per_member",
+    "purchase_frequency": "orders_per_member",
+    "items_per_order": "items_per_order"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "2d0f316b286de6e5958ff9d5c09e21fc8bf0ca11e598484f9526f1960c9ddaff",
+  "answer": "2026 年 8 月（按当前青禾客户数据统计，未按门店等维度拆分）：有效订单均额为 171.69 元/单；购买会员人均消费为 311.39 元/账户；购买频次为 1.81 单/账户；单均商品件数为 4.02 件/单。以上结果基于当前合成测试库覆盖范围计算。",
+  "question": "2026 年 8 月青禾的有效订单均额、购买会员人均消费、购买频次和单均商品件数是多少？",
+  "trace_id": "d383e2f0-d063-46cd-b4d9-86150f860bf1",
+  "elapsed_seconds": 13.156,
+  "model_usage": {
+    "prompt_tokens": 315308,
+    "completion_tokens": 710,
+    "total_tokens": 316018
+  },
+  "model_calls_with_usage": 2
+}

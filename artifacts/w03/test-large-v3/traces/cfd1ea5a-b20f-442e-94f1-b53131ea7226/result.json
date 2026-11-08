@@ -1,0 +1,10 @@
+{
+  "status": "error",
+  "code": "MODEL_HTTP_402",
+  "reason": "本次调用未完成，请查看运行记录；不能把失败当成零。",
+  "question": "青禾 2026 年 8 月一共卖了多少钱？我说的是扣掉退款以后的净额。",
+  "trace_id": "cfd1ea5a-b20f-442e-94f1-b53131ea7226",
+  "elapsed_seconds": 0.594,
+  "model_usage": {},
+  "model_calls_with_usage": 0
+}

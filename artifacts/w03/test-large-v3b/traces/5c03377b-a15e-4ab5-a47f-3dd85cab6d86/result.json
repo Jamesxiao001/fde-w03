@@ -1,0 +1,38 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "monthly_paid_buyer_count"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  COUNT(DISTINCT CASE WHEN paid_eligible THEN member_id END) AS monthly_paid_buyer_count\nFROM \"data\".\"main\".\"valid_order_month_facts\" valid_order_month_facts_src_10000\nWHERE DATE_TRUNC('day', stat_period_start) BETWEEN '2026-08-01' AND '2026-08-31'",
+  "columns": [
+    "monthly_paid_buyer_count"
+  ],
+  "rows": [
+    [
+      3683
+    ]
+  ],
+  "seconds": 0.157,
+  "units": {
+    "monthly_paid_buyer_count": "count"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "2d0f316b286de6e5958ff9d5c09e21fc8bf0ca11e598484f9526f1960c9ddaff",
+  "answer": "2026年8月，青禾付费会员中当月下过有效订单的账户数为 3,683 个。统计口径为：按2026年8月完整自然月，先判断月末最后一天具有付费资格的账户（仅悦享年卡、家庭季卡计入，同一账户多张有效卡不重复计人），再统计这些账户在当月全渠道、全门店的有效订单；不要求每笔订单发生当天已具有付费资格。该结果为CRM会员账户数，不按门店或渠道拆分。",
+  "question": "8 月份（2026 年）青禾付费会员里在当月下过有效订单的有几个账户？",
+  "trace_id": "5c03377b-a15e-4ab5-a47f-3dd85cab6d86",
+  "elapsed_seconds": 14.843,
+  "model_usage": {
+    "prompt_tokens": 315125,
+    "completion_tokens": 1069,
+    "total_tokens": 316194
+  },
+  "model_calls_with_usage": 2
+}

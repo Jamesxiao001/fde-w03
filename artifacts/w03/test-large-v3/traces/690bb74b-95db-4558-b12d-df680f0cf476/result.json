@@ -1,0 +1,10 @@
+{
+  "status": "error",
+  "code": "MODEL_HTTP_402",
+  "reason": "本次调用未完成，请查看运行记录；不能把失败当成零。",
+  "question": "8 月份（2026 年）青禾付费会员里在当月下过有效订单的有几个账户？",
+  "trace_id": "690bb74b-95db-4558-b12d-df680f0cf476",
+  "elapsed_seconds": 0.578,
+  "model_usage": {},
+  "model_calls_with_usage": 0
+}

@@ -1,0 +1,40 @@
+{
+  "passed": false,
+  "errors": [
+    {
+      "model_usage": {
+        "quote": "会员卡（card）：来源：客户材料 05 数据字典（FDE 已核对原文）——cards 一行一张会员卡，一个 CRM 会员账户可对应多张卡；卡有卡产品（card_type，四种枚举）、权益开始日 valid_from、计划权益结束日 valid_until、提前终止日 ended_at（可为空）。客户方对字段端点的解释见第 3 节。",
+        "used_for": [
+          {
+            "kind": "derived_model",
+            "name": "monthly_paid_member_activity"
+          },
+          {
+            "kind": "metric",
+            "name": "monthly_paid_buyer_count"
+          },
+          {
+            "kind": "metric",
+            "name": "monthly_paid_order_count"
+          },
+          {
+            "kind": "metric",
+            "name": "monthly_paid_sales_cents"
+          },
+          {
+            "kind": "metric",
+            "name": "monthly_paid_repeat_buyer_count"
+          },
+          {
+            "kind": "metric",
+            "name": "monthly_paid_repeat_rate"
+          },
+          {
+            "kind": "metric",
+            "name": "monthly_paid_avg_order_value"
+          }
+        ]
+      }
+    }
+  ]
+}

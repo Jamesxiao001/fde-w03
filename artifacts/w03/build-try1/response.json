@@ -1,0 +1,325 @@
+{
+  "semantic_models": [
+    {
+      "name": "order_model",
+      "model": "ref('orders')",
+      "defaults": {
+        "agg_time_dimension": "ordered_at"
+      },
+      "entities": [
+        {
+          "name": "order",
+          "type": "primary",
+          "expr": "order_id"
+        },
+        {
+          "name": "member",
+          "type": "foreign",
+          "expr": "member_id"
+        },
+        {
+          "name": "store",
+          "type": "foreign",
+          "expr": "store_id"
+        }
+      ],
+      "dimensions": [
+        {
+          "name": "ordered_at",
+          "type": "time",
+          "type_params": {
+            "time_granularity": "day"
+          }
+        },
+        {
+          "name": "channel",
+          "type": "categorical"
+        },
+        {
+          "name": "status",
+          "type": "categorical"
+        }
+      ],
+      "measures": [
+        {
+          "name": "valid_order_count_measure",
+          "expr": "CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN 1 ELSE 0 END",
+          "agg": "sum"
+        },
+        {
+          "name": "net_sales_cents_measure",
+          "expr": "CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END",
+          "agg": "sum"
+        },
+        {
+          "name": "buyer_count_measure",
+          "expr": "CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN member_id ELSE NULL END",
+          "agg": "count_distinct"
+        }
+      ]
+    },
+    {
+      "name": "member_model",
+      "model": "ref('members')",
+      "defaults": {
+        "agg_time_dimension": "registered_at"
+      },
+      "entities": [
+        {
+          "name": "member",
+          "type": "primary",
+          "expr": "member_id"
+        },
+        {
+          "name": "home_store",
+          "type": "foreign",
+          "expr": "home_store_id"
+        }
+      ],
+      "dimensions": [
+        {
+          "name": "registered_at",
+          "type": "time",
+          "type_params": {
+            "time_granularity": "day"
+          }
+        },
+        {
+          "name": "tier",
+          "type": "categorical"
+        }
+      ],
+      "measures": []
+    },
+    {
+      "name": "selling_store",
+      "model": "ref('stores')",
+      "entities": [
+        {
+          "name": "store",
+          "type": "primary",
+          "expr": "store_id"
+        }
+      ],
+      "dimensions": [
+        {
+          "name": "region",
+          "type": "categorical"
+        },
+        {
+          "name": "store_name",
+          "type": "categorical"
+        }
+      ],
+      "measures": []
+    },
+    {
+      "name": "home_store",
+      "model": "ref('stores')",
+      "entities": [
+        {
+          "name": "home_store",
+          "type": "primary",
+          "expr": "store_id"
+        }
+      ],
+      "dimensions": [
+        {
+          "name": "region",
+          "type": "categorical"
+        },
+        {
+          "name": "store_name",
+          "type": "categorical"
+        }
+      ],
+      "measures": []
+    }
+  ],
+  "metrics": [
+    {
+      "name": "valid_order_count",
+      "label": "有效订单数",
+      "description": "按下单日期统计 paid 状态且实付金额减退款金额大于零的订单数；取消和全退不计。单位：单。",
+      "type": "simple",
+      "type_params": {
+        "measure": "valid_order_count_measure"
+      }
+    },
+    {
+      "name": "net_sales_cents",
+      "label": "净销售额",
+      "description": "按下单日期归属，paid 订单实付金额减退款金额后的合计；取消单不计。单位：分。",
+      "type": "simple",
+      "type_params": {
+        "measure": "net_sales_cents_measure"
+      }
+    },
+    {
+      "name": "buyer_count",
+      "label": "购买会员数",
+      "description": "统计窗口及筛选条件内有有效订单的不同 CRM 会员账户数，不做跨系统自然人去重。单位：账户。",
+      "type": "simple",
+      "type_params": {
+        "measure": "buyer_count_measure"
+      }
+    },
+    {
+      "name": "avg_order_value",
+      "label": "有效订单均额",
+      "description": "净销售额除以有效订单数，单位分／单；分母为零时未定义。",
+      "type": "ratio",
+      "type_params": {
+        "numerator": "net_sales_cents",
+        "denominator": "valid_order_count"
+      }
+    }
+  ],
+  "catalog": [
+    {
+      "id": "valid_order_count",
+      "name": "有效订单数",
+      "aliases": [],
+      "unit": "count",
+      "constraints": [
+        "仅统计 paid 状态且实付金额减退款金额大于零的订单；取消和全额退款不计。"
+      ],
+      "sources": [
+        {
+          "file": "01_订单日报说明.md",
+          "quote": "状态为 paid 且实付金额减退款金额大于零的订单数；取消和全退不计。"
+        }
+      ],
+      "query_policy": {
+        "full_month_only": false
+      }
+    },
+    {
+      "id": "net_sales_cents",
+      "name": "净销售额",
+      "aliases": [],
+      "unit": "cents",
+      "constraints": [
+        "取消单不计；退款按原订单下单日期归属；金额单位为分。"
+      ],
+      "sources": [
+        {
+          "file": "01_订单日报说明.md",
+          "quote": "paid 订单实付减退款后合计；取消单不计；按原订单下单日期归属；单位分。"
+        }
+      ],
+      "query_policy": {
+        "full_month_only": false
+      }
+    },
+    {
+      "id": "buyer_count",
+      "name": "购买会员数",
+      "aliases": [],
+      "unit": "count",
+      "constraints": [
+        "按 CRM 会员账户去重，不跨系统自然人。"
+      ],
+      "sources": [
+        {
+          "file": "01_订单日报说明.md",
+          "quote": "统计窗口及筛选条件内有有效订单的不同 CRM 会员账户数，不做跨系统自然人去重。"
+        }
+      ],
+      "query_policy": {
+        "full_month_only": false
+      }
+    },
+    {
+      "id": "avg_order_value",
+      "name": "有效订单均额",
+      "aliases": [],
+      "unit": "cents_per_order",
+      "constraints": [
+        "分母为零时未定义。"
+      ],
+      "sources": [
+        {
+          "file": "02_财务邮件.md",
+          "quote": "净销售额除以有效订单数，单位分／单；分母零时未定义。"
+        }
+      ],
+      "query_policy": {
+        "full_month_only": false
+      }
+    }
+  ],
+  "model_sql": {},
+  "grain_keys": {
+    "order_model": [
+      "order_id"
+    ],
+    "member_model": [
+      "member_id"
+    ],
+    "selling_store": [
+      "store_id"
+    ],
+    "home_store": [
+      "store_id"
+    ]
+  },
+  "unresolved": [],
+  "business_model_usage": [
+    {
+      "quote": "members 一行一份 CRM 会员账户，不视为跨系统自然人",
+      "used_for": [
+        {
+          "kind": "semantic_model",
+          "name": "member_model"
+        },
+        {
+          "kind": "metric",
+          "name": "buyer_count"
+        }
+      ]
+    },
+    {
+      "quote": "orders.store_id 为订单成交门店；members.home_store_id 为会员归属门店；数据字典明确二者不相等（FDE 已核对原文）。",
+      "used_for": [
+        {
+          "kind": "semantic_model",
+          "name": "selling_store"
+        },
+        {
+          "kind": "semantic_model",
+          "name": "home_store"
+        },
+        {
+          "kind": "dimension",
+          "name": "store__region"
+        },
+        {
+          "kind": "dimension",
+          "name": "store__store_name"
+        },
+        {
+          "kind": "dimension",
+          "name": "home_store__region"
+        },
+        {
+          "kind": "dimension",
+          "name": "home_store__store_name"
+        }
+      ]
+    },
+    {
+      "quote": "订单挂在 CRM 会员账户下并记录成交门店；会员账户另记录归属门店；两种门店不是同一字段，也不相等。",
+      "used_for": [
+        {
+          "kind": "semantic_model",
+          "name": "order_model"
+        },
+        {
+          "kind": "semantic_model",
+          "name": "member_model"
+        }
+      ]
+    }
+  ]
+}

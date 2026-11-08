@@ -1,0 +1,22 @@
+{
+  "version": "w02-extractor-0.1.0",
+  "scope_id": "qinghe",
+  "sources": [
+    "artifacts/w02/sources/W3-interview-ead6b153-5af5-5e6f-aeb3-b790b94c6545-transcript.json",
+    "artifacts/w02/sources/W3-interview-90e29682-ba09-5e86-a548-8cd1f2c147db-transcript.json",
+    "artifacts/w02/sources/W3-interview-3959939d-923d-5893-87eb-40d815db8263-transcript.json"
+  ],
+  "prompt": "customer/w02/extraction_prompt.txt",
+  "focus_questions": [
+    "本期总部运营月报的“付费会员”资格计入哪些卡产品、不计入哪些，理由是什么，这个口径适用于哪份报表？",
+    "会员等级（普通、银卡、金卡）和购卡支付金额与付费资格是什么关系？",
+    "一个账户有多张卡、或先终止后换卡时，资格如何按账户判断，是否会重复计人或重复累计订单？",
+    "卡的生效日、计划到期日、提前终止日当天是否算有效；提前终止日与计划到期日同时存在时以哪个为准；提前终止为空是否代表长期有效？",
+    "统计“按门店”时，订单成交门店与会员归属门店如何区分，运营的默认用法是否已知？",
+    "这些资格规则由谁确认、有无成文文件，哪些仍待核实、应向谁核实？"
+  ],
+  "batch_chars": 4000,
+  "max_batches": 24,
+  "reconcile_chars": 96000,
+  "profile": "deepseek-json"
+}

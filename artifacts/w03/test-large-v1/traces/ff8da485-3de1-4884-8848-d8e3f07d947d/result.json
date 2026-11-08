@@ -1,0 +1,54 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "payment_cents",
+      "refund_cents",
+      "net_sales_cents",
+      "gross_cents",
+      "discount_cents"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  SUM(CASE WHEN status = 'paid' THEN paid_cents ELSE 0 END) AS payment_cents\n  , SUM(CASE WHEN status = 'paid' THEN refund_cents ELSE 0 END) AS refund_cents\n  , SUM(CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END) AS net_sales_cents\n  , SUM(CASE WHEN status = 'paid' THEN gross_cents ELSE 0 END) AS gross_cents\n  , SUM(CASE WHEN status = 'paid' THEN gross_cents - paid_cents ELSE 0 END) AS discount_cents\nFROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+  "columns": [
+    "payment_cents",
+    "refund_cents",
+    "net_sales_cents",
+    "gross_cents",
+    "discount_cents"
+  ],
+  "rows": [
+    [
+      570270646,
+      56349326,
+      513921320,
+      633763245,
+      63492599
+    ]
+  ],
+  "seconds": 0.047,
+  "units": {
+    "payment_cents": "cents",
+    "refund_cents": "cents",
+    "net_sales_cents": "cents",
+    "gross_cents": "cents",
+    "discount_cents": "cents"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+  "answer": "在青禾当前客户范围内，按2026年8月（按下单日期归属，覆盖8月全月）统计：实付金额为5,702,706.46元；退款金额为563,493.26元；净销售额为5,139,213.20元；支付订单原价金额为6,337,632.45元；优惠金额为634,925.99元。口径上，实付金额未扣退款；退款按原订单下单日期归属，不按现金退款发生日；净销售额为实付减退款，取消单不计；优惠金额不因退款冲减。以上为合成测试库中青禾CRM会员账户范围的统计结果。",
+  "question": "2026 年 8 月青禾的实付金额、退款金额、净销售额、支付订单原价金额和优惠金额分别是多少？",
+  "trace_id": "ff8da485-3de1-4884-8848-d8e3f07d947d",
+  "elapsed_seconds": 14.25,
+  "model_usage": {
+    "prompt_tokens": 313500,
+    "completion_tokens": 957,
+    "total_tokens": 314457
+  },
+  "model_calls_with_usage": 2
+}

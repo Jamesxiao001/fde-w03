@@ -1,0 +1,22 @@
+{
+  "message": {
+    "role": "assistant",
+    "content": "我先读取本轮材料与现有模型。",
+    "tool_calls": [
+      {
+        "index": 0,
+        "id": "call_00_ET_lKr4VwqOyuAmNdb88fdB6663",
+        "type": "function",
+        "function": {
+          "name": "inspect_materials",
+          "arguments": "{}"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "prompt_tokens": 1690,
+    "completion_tokens": 31,
+    "total_tokens": 1721
+  }
+}

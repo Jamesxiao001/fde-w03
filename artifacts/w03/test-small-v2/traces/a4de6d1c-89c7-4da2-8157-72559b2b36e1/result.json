@@ -1,0 +1,50 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "net_sales_cents"
+    ],
+    "start": "2026-07-01",
+    "end": "2026-08-01",
+    "group_by": [
+      "home_store"
+    ],
+    "filters": []
+  },
+  "sql": "SELECT\n  home_store\n  , SUM(__net_sales_cents) AS net_sales_cents\nFROM (\n  SELECT\n    home_store_id AS home_store\n    , CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END AS __net_sales_cents\n  FROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\n  WHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-07-01' AND '2026-07-31'\n) subq_5\nGROUP BY\n  home_store",
+  "columns": [
+    "home_store",
+    "net_sales_cents"
+  ],
+  "rows": [
+    [
+      "S03",
+      9000
+    ],
+    [
+      "S01",
+      4500
+    ],
+    [
+      "S02",
+      18000
+    ]
+  ],
+  "seconds": 0.031,
+  "units": {
+    "net_sales_cents": "cents"
+  },
+  "data_version": "qinghe-w03-20260923-small",
+  "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+  "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+  "answer": "基于本周合成测试库中当前客户青禾的会员账户范围，统计 2026 年 7 月按会员归属门店分组的净销售额：会员归属门店 S03 为 90.00 元，S01 为 45.00 元，S02 为 180.00 元；上述门店合计 315.00 元。口径为 paid 订单实付金额减退款后的净额，取消单不计，并按原订单下单日期归属到 2026 年 7 月；此处统计的是会员归属门店，不是订单成交门店。",
+  "question": "2026 年 7 月青禾按会员归属门店统计的净销售额是多少？",
+  "trace_id": "a4de6d1c-89c7-4da2-8157-72559b2b36e1",
+  "elapsed_seconds": 10.219,
+  "model_usage": {
+    "prompt_tokens": 12483,
+    "completion_tokens": 1067,
+    "total_tokens": 13550
+  },
+  "model_calls_with_usage": 2
+}

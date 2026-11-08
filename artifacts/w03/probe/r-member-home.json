@@ -1,0 +1,4 @@
+{
+  "status": "unsupported",
+  "reason": "分组维度未支持当前指标"
+}

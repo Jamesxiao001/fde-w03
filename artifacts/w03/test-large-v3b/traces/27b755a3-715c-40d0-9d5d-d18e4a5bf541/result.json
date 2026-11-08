@@ -1,0 +1,46 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "monthly_paid_repeat_buyer_count",
+      "monthly_paid_repeat_rate",
+      "monthly_paid_avg_order_value"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "WITH sma_10003_cte AS (\n  SELECT\n    DATE_TRUNC('day', stat_period_start) AS metric_time__day\n    , CASE WHEN paid_eligible THEN member_id END AS __monthly_paid_buyer_count\n    , CASE WHEN paid_eligible THEN order_id END AS __monthly_paid_order_count\n    , CASE WHEN paid_eligible THEN net_sales_cents ELSE 0 END AS __monthly_paid_sales_cents\n    , CASE WHEN paid_eligible AND member_month_valid_order_count >= 2 THEN member_id END AS __monthly_paid_repeat_buyer_count\n  FROM \"data\".\"main\".\"valid_order_month_facts\" valid_order_month_facts_src_10000\n)\n\nSELECT\n  MAX(subq_10.monthly_paid_repeat_buyer_count) AS monthly_paid_repeat_buyer_count\n  , MAX(subq_17.monthly_paid_repeat_rate) AS monthly_paid_repeat_rate\n  , MAX(subq_17.monthly_paid_avg_order_value) AS monthly_paid_avg_order_value\nFROM (\n  SELECT\n    COUNT(DISTINCT __monthly_paid_repeat_buyer_count) AS monthly_paid_repeat_buyer_count\n  FROM sma_10003_cte\n  WHERE metric_time__day BETWEEN '2026-08-01' AND '2026-08-31'\n) subq_10\nCROSS JOIN (\n  SELECT\n    CAST(COUNT(DISTINCT __monthly_paid_repeat_buyer_count) AS DOUBLE) / CAST(NULLIF(COUNT(DISTINCT __monthly_paid_buyer_count), 0) AS DOUBLE) AS monthly_paid_repeat_rate\n    , CAST(SUM(__monthly_paid_sales_cents) AS DOUBLE) / CAST(NULLIF(COUNT(DISTINCT __monthly_paid_order_count), 0) AS DOUBLE) AS monthly_paid_avg_order_value\n  FROM sma_10003_cte\n  WHERE metric_time__day BETWEEN '2026-08-01' AND '2026-08-31'\n) subq_17",
+  "columns": [
+    "monthly_paid_repeat_buyer_count",
+    "monthly_paid_repeat_rate",
+    "monthly_paid_avg_order_value"
+  ],
+  "rows": [
+    [
+      1643,
+      0.4461037197936465,
+      17216.63640517898
+    ]
+  ],
+  "seconds": 0.204,
+  "units": {
+    "monthly_paid_repeat_buyer_count": "count",
+    "monthly_paid_repeat_rate": "ratio",
+    "monthly_paid_avg_order_value": "cents_per_order"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "2d0f316b286de6e5958ff9d5c09e21fc8bf0ca11e598484f9526f1960c9ddaff",
+  "answer": "青禾 2026 年 8 月（完整自然月，全渠道、全门店，未按门店或渠道拆分）月末付费会员复购人数为 1,643 个 CRM 会员账户；月末付费会员复购率为 44.61%；月末付费会员订单均额为 172.17 元/单。口径为：先按 8 月月末最后一天判断付费资格（悦享年卡或家庭季卡有效，账户去重），再统计这些账户在 8 月的有效订单；复购指同一账户当月至少两笔有效订单。比例在分母为零时才未定义，本次返回结果非零。数据属于当前青禾客户范围，来自本周合成测试库，覆盖 2024-09-01 至 2026-09-01。",
+  "question": "2026 年 8 月青禾月末付费会员复购人数、月末付费会员复购率和月末付费会员订单均额是多少？",
+  "trace_id": "27b755a3-715c-40d0-9d5d-d18e4a5bf541",
+  "elapsed_seconds": 12.781,
+  "model_usage": {
+    "prompt_tokens": 316093,
+    "completion_tokens": 1274,
+    "total_tokens": 317367
+  },
+  "model_calls_with_usage": 2
+}

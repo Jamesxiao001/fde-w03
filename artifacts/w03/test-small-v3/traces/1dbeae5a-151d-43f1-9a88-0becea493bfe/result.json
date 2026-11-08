@@ -1,0 +1,42 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "valid_order_count",
+      "avg_order_value"
+    ],
+    "start": "2026-05-01",
+    "end": "2026-06-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "WITH sma_10002_cte AS (\n  SELECT\n    DATE_TRUNC('day', ordered_at) AS metric_time__day\n    , CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN order_id END AS __valid_order_count\n    , CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END AS __net_sales_cents\n  FROM \"data\".\"main\".\"order_facts\" order_facts_src_10000\n)\n\nSELECT\n  MAX(subq_8.valid_order_count) AS valid_order_count\n  , MAX(subq_15.avg_order_value) AS avg_order_value\nFROM (\n  SELECT\n    COUNT(DISTINCT __valid_order_count) AS valid_order_count\n  FROM sma_10002_cte\n  WHERE metric_time__day BETWEEN '2026-05-01' AND '2026-05-31'\n) subq_8\nCROSS JOIN (\n  SELECT\n    CAST(SUM(__net_sales_cents) AS DOUBLE) / CAST(NULLIF(COUNT(DISTINCT __valid_order_count), 0) AS DOUBLE) AS avg_order_value\n  FROM sma_10002_cte\n  WHERE metric_time__day BETWEEN '2026-05-01' AND '2026-05-31'\n) subq_15",
+  "columns": [
+    "valid_order_count",
+    "avg_order_value"
+  ],
+  "rows": [
+    [
+      0,
+      null
+    ]
+  ],
+  "seconds": 0.047,
+  "units": {
+    "valid_order_count": "count",
+    "avg_order_value": "cents_per_order"
+  },
+  "data_version": "qinghe-w03-20260923-small",
+  "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+  "catalog_sha256": "2d0f316b286de6e5958ff9d5c09e21fc8bf0ca11e598484f9526f1960c9ddaff",
+  "answer": "2026 年 5 月，青禾客户范围内（统计单位为 CRM 会员账户）的有效订单数为 0 单；由于有效订单数为 0，有效订单均额的分母为零，因此均额为未定义，不能按 0 元理解。统计口径为：状态为 paid 且实付金额减退款金额大于零的订单计入有效订单，取消和全退不计；均额为净销售额除以有效订单数。本次仅应用了 2026 年 5 月的时间范围筛选，未添加门店等其他筛选。",
+  "question": "2026 年 5 月青禾的有效订单数和有效订单均额是多少？",
+  "trace_id": "1dbeae5a-151d-43f1-9a88-0becea493bfe",
+  "elapsed_seconds": 10.047,
+  "model_usage": {
+    "prompt_tokens": 14368,
+    "completion_tokens": 778,
+    "total_tokens": 15146
+  },
+  "model_calls_with_usage": 2
+}

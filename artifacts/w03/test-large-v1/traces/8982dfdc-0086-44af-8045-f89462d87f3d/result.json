@@ -1,0 +1,134 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "new_member_count"
+    ],
+    "start": "2026-07-01",
+    "end": "2026-08-01",
+    "group_by": [
+      "home_store"
+    ],
+    "filters": []
+  },
+  "sql": "SELECT\n  home_store\n  , SUM(__new_member_count) AS new_member_count\nFROM (\n  SELECT\n    home_store_id AS home_store\n    , CASE WHEN member_id IS NOT NULL THEN 1 ELSE 0 END AS __new_member_count\n  FROM \"data\".\"main\".\"members\" members_src_10000\n  WHERE DATE_TRUNC('day', registered_at) BETWEEN '2026-07-01' AND '2026-07-31'\n) subq_5\nGROUP BY\n  home_store",
+  "columns": [
+    "home_store",
+    "new_member_count"
+  ],
+  "rows": [
+    [
+      "S08",
+      6
+    ],
+    [
+      "S15",
+      7
+    ],
+    [
+      "S16",
+      3
+    ],
+    [
+      "S11",
+      1
+    ],
+    [
+      "S05",
+      5
+    ],
+    [
+      "S19",
+      1
+    ],
+    [
+      "S03",
+      3
+    ],
+    [
+      "S07",
+      2
+    ],
+    [
+      "S10",
+      4
+    ],
+    [
+      "S09",
+      2
+    ],
+    [
+      "S06",
+      1
+    ],
+    [
+      "S04",
+      6
+    ],
+    [
+      "S20",
+      4
+    ],
+    [
+      "S21",
+      3
+    ],
+    [
+      "S22",
+      3
+    ],
+    [
+      "S24",
+      4
+    ],
+    [
+      "S17",
+      6
+    ],
+    [
+      "S23",
+      3
+    ],
+    [
+      "S12",
+      2
+    ],
+    [
+      "S18",
+      3
+    ],
+    [
+      "S02",
+      3
+    ],
+    [
+      "S13",
+      5
+    ],
+    [
+      "S14",
+      4
+    ],
+    [
+      "S01",
+      3
+    ]
+  ],
+  "seconds": 0.031,
+  "units": {
+    "new_member_count": "count"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+  "answer": "2026 年 7 月，青禾按会员归属门店统计的新注册会员账户共 84 个。统计区间为 2026-07-01 至 2026-07-31，统计范围截至 2026-08-01 且不含该日；按会员归属门店分组后，各门店数量分别为：S01 3、S02 3、S03 3、S04 6、S05 5、S06 1、S07 2、S08 6、S09 2、S10 4、S11 1、S12 2、S13 5、S14 4、S15 7、S16 3、S17 6、S18 3、S19 1、S20 4、S21 3、S22 3、S23 3、S24 4。该指标按 CRM 会员账户口径统计，不等同于自然人数。",
+  "question": "2026 年 7 月青禾按会员归属门店统计的注册会员数是多少？",
+  "trace_id": "8982dfdc-0086-44af-8045-f89462d87f3d",
+  "elapsed_seconds": 15.047,
+  "model_usage": {
+    "prompt_tokens": 313204,
+    "completion_tokens": 1261,
+    "total_tokens": 314465
+  },
+  "model_calls_with_usage": 2
+}

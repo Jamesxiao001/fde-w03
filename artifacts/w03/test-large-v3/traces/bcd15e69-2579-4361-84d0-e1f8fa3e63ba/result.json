@@ -1,0 +1,10 @@
+{
+  "status": "error",
+  "code": "MODEL_HTTP_402",
+  "reason": "本次调用未完成，请查看运行记录；不能把失败当成零。",
+  "question": "看一下 2026 年 8 月青禾付费会员的复购率。",
+  "trace_id": "bcd15e69-2579-4361-84d0-e1f8fa3e63ba",
+  "elapsed_seconds": 0.719,
+  "model_usage": {},
+  "model_calls_with_usage": 0
+}

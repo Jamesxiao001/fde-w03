@@ -1,0 +1,50 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "buyer_count",
+      "refund_buyer_count",
+      "selling_store_count",
+      "valid_order_items"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  COUNT(DISTINCT CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN member_id ELSE NULL END) AS buyer_count\n  , COUNT(DISTINCT CASE WHEN status = 'paid' AND refund_cents > 0 THEN member_id ELSE NULL END) AS refund_buyer_count\n  , COUNT(DISTINCT CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN store_id ELSE NULL END) AS selling_store_count\n  , SUM(CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN quantity ELSE 0 END) AS valid_order_items\nFROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+  "columns": [
+    "buyer_count",
+    "refund_buyer_count",
+    "selling_store_count",
+    "valid_order_items"
+  ],
+  "rows": [
+    [
+      16504,
+      4173,
+      24,
+      120210
+    ]
+  ],
+  "seconds": 0.078,
+  "units": {
+    "buyer_count": "count",
+    "refund_buyer_count": "count",
+    "selling_store_count": "count",
+    "valid_order_items": "items"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+  "answer": "2026年8月整月（2026-08-01 至 2026-08-31，按左闭右开口径统计）在青禾客户范围内：购买会员数为 16,504 个 CRM 会员账户；退款会员数为 4,173 个 CRM 会员账户；成交门店数为 24 家；有效订单商品件数为 120,210 件。口径说明：购买会员按窗口内有有效订单的不同 CRM 会员账户计数，不做跨系统自然人去重；退款会员按窗口内发生退款的已支付订单关联的不同 CRM 会员账户计数；成交门店按窗口内至少有一笔有效订单的不同订单归属门店计数，不等同于会员归属门店；有效订单商品件数为有效订单中的原始购买件数合计，不是扣除退款后的净商品销量。本次未额外按地区或门店拆分，结果来自当前已加载的青禾合成测试数据范围。",
+  "question": "2026 年 8 月青禾的购买会员数、退款会员数、成交门店数和有效订单商品件数分别是多少？",
+  "trace_id": "395043e9-e4a4-4a88-bce3-09a1054b9c6f",
+  "elapsed_seconds": 16.391,
+  "model_usage": {
+    "prompt_tokens": 313374,
+    "completion_tokens": 1169,
+    "total_tokens": 314543
+  },
+  "model_calls_with_usage": 2
+}

@@ -1,0 +1,134 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "buyer_count"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [
+      "home_store"
+    ],
+    "filters": []
+  },
+  "sql": "SELECT\n  home_store\n  , COUNT(DISTINCT __buyer_count) AS buyer_count\nFROM (\n  SELECT\n    home_store_id AS home_store\n    , CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN member_id ELSE NULL END AS __buyer_count\n  FROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\n  WHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'\n) subq_5\nGROUP BY\n  home_store",
+  "columns": [
+    "home_store",
+    "buyer_count"
+  ],
+  "rows": [
+    [
+      "S11",
+      698
+    ],
+    [
+      "S16",
+      695
+    ],
+    [
+      "S23",
+      712
+    ],
+    [
+      "S17",
+      693
+    ],
+    [
+      "S12",
+      678
+    ],
+    [
+      "S20",
+      676
+    ],
+    [
+      "S21",
+      696
+    ],
+    [
+      "S22",
+      677
+    ],
+    [
+      "S19",
+      690
+    ],
+    [
+      "S05",
+      692
+    ],
+    [
+      "S14",
+      675
+    ],
+    [
+      "S03",
+      676
+    ],
+    [
+      "S07",
+      684
+    ],
+    [
+      "S08",
+      670
+    ],
+    [
+      "S15",
+      710
+    ],
+    [
+      "S24",
+      696
+    ],
+    [
+      "S01",
+      671
+    ],
+    [
+      "S09",
+      668
+    ],
+    [
+      "S10",
+      670
+    ],
+    [
+      "S06",
+      682
+    ],
+    [
+      "S13",
+      699
+    ],
+    [
+      "S02",
+      697
+    ],
+    [
+      "S18",
+      703
+    ],
+    [
+      "S04",
+      696
+    ]
+  ],
+  "seconds": 0.047,
+  "units": {
+    "buyer_count": "count"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+  "answer": "2026 年 8 月（统计窗口为 2026-08-01 至 2026-09-01，不含 9 月 1 日）青禾按会员归属门店统计的购买会员数合计为 16,504 个 CRM 会员账户。分归属门店为：S01 671、S02 697、S03 676、S04 696、S05 692、S06 682、S07 684、S08 670、S09 668、S10 670、S11 698、S12 678、S13 699、S14 675、S15 710、S16 695、S17 693、S18 703、S19 690、S20 676、S21 696、S22 677、S23 712、S24 696。口径为统计窗口内有有效订单的不同 CRM 会员账户数，不做跨系统自然人去重；结果基于本周合成测试库，覆盖至 2026-09-01。",
+  "question": "2026 年 8 月青禾按会员归属门店统计的购买会员数是多少？",
+  "trace_id": "bd4697c8-543a-4669-9b47-11ea791e276d",
+  "elapsed_seconds": 18.578,
+  "model_usage": {
+    "prompt_tokens": 313198,
+    "completion_tokens": 1819,
+    "total_tokens": 315017
+  },
+  "model_calls_with_usage": 2
+}

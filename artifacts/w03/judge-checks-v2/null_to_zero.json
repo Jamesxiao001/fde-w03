@@ -1,0 +1,89 @@
+{
+  "expected": {
+    "status": "ok",
+    "intent": {
+      "metrics": [
+        "valid_order_count",
+        "avg_order_value"
+      ],
+      "start": "2026-05-01",
+      "end": "2026-06-01",
+      "group_by": [],
+      "filters": []
+    },
+    "columns": [
+      "valid_order_count",
+      "avg_order_value"
+    ],
+    "rows": [
+      [
+        0,
+        null
+      ]
+    ],
+    "units": {
+      "valid_order_count": "count",
+      "avg_order_value": "cents_per_order"
+    }
+  },
+  "actual": {
+    "status": "ok",
+    "intent": {
+      "metrics": [
+        "valid_order_count",
+        "avg_order_value"
+      ],
+      "start": "2026-05-01",
+      "end": "2026-06-01",
+      "group_by": [],
+      "filters": []
+    },
+    "sql": "WITH sma_10005_cte AS (\n  SELECT\n    DATE_TRUNC('day', ordered_at) AS metric_time__day\n    , CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN 1 ELSE 0 END AS __valid_order_count\n    , CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END AS __net_sales_cents\n  FROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\n)\n\nSELECT\n  MAX(subq_8.valid_order_count) AS valid_order_count\n  , MAX(subq_15.avg_order_value) AS avg_order_value\nFROM (\n  SELECT\n    SUM(__valid_order_count) AS valid_order_count\n  FROM sma_10005_cte\n  WHERE metric_time__day BETWEEN '2026-05-01' AND '2026-05-31'\n) subq_8\nCROSS JOIN (\n  SELECT\n    CAST(SUM(__net_sales_cents) AS DOUBLE) / CAST(NULLIF(SUM(__valid_order_count), 0) AS DOUBLE) AS avg_order_value\n  FROM sma_10005_cte\n  WHERE metric_time__day BETWEEN '2026-05-01' AND '2026-05-31'\n) subq_15",
+    "columns": [
+      "valid_order_count",
+      "avg_order_value"
+    ],
+    "rows": [
+      [
+        0,
+        0
+      ]
+    ],
+    "seconds": 0.047,
+    "units": {
+      "valid_order_count": "count",
+      "avg_order_value": "cents_per_order"
+    },
+    "data_version": "qinghe-w03-20260923-small",
+    "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+    "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+    "answer": "按当前青禾客户（CRM会员账户口径）统计，2026年5月1日至5月31日范围内，未应用门店筛选，也未按门店分组。有效订单数为0单；有效订单均额因有效订单数为0、分母为零而无法计算，属于未定义，不能视为0元。有效订单口径为已支付且实付金额减退款金额大于零的订单，取消和全退不计。",
+    "question": "2026 年 5 月青禾的有效订单数和有效订单均额是多少？",
+    "trace_id": "8b02164b-22a6-421f-9f62-7cecd3cecd32",
+    "elapsed_seconds": 9.953,
+    "model_usage": {
+      "prompt_tokens": 12559,
+      "completion_tokens": 879,
+      "total_tokens": 13438
+    },
+    "model_calls_with_usage": 2
+  },
+  "name": "null_to_zero",
+  "base_case": "c14-zero-and-null",
+  "note": "null 改 0：零分母均额改成 0",
+  "should_pass": false,
+  "comparison": {
+    "passed": false,
+    "differences": [
+      {
+        "path": "rows",
+        "group": [],
+        "metric": "avg_order_value",
+        "expected": null,
+        "actual": 0,
+        "rule": "null"
+      }
+    ]
+  },
+  "as_expected": true
+}

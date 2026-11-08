@@ -1,0 +1,142 @@
+{
+  "passed": false,
+  "items": [
+    {
+      "id": "store",
+      "queryable": false,
+      "unresolved": null,
+      "passed": false
+    },
+    {
+      "id": "home_store",
+      "queryable": true,
+      "unresolved": null,
+      "passed": true
+    },
+    {
+      "id": "member",
+      "queryable": true,
+      "unresolved": null,
+      "passed": true
+    },
+    {
+      "id": "store__region",
+      "queryable": false,
+      "unresolved": null,
+      "passed": false
+    },
+    {
+      "id": "store__store_name",
+      "queryable": false,
+      "unresolved": null,
+      "passed": false
+    },
+    {
+      "id": "home_store__region",
+      "queryable": true,
+      "unresolved": null,
+      "passed": true
+    },
+    {
+      "id": "home_store__store_name",
+      "queryable": true,
+      "unresolved": null,
+      "passed": true
+    },
+    {
+      "id": "order__channel",
+      "queryable": false,
+      "unresolved": null,
+      "passed": false
+    },
+    {
+      "id": "order__status",
+      "queryable": false,
+      "unresolved": null,
+      "passed": false
+    },
+    {
+      "id": "member__tier",
+      "queryable": true,
+      "unresolved": null,
+      "passed": true
+    },
+    {
+      "id": "metric_time__day",
+      "queryable": true,
+      "unresolved": null,
+      "passed": true
+    },
+    {
+      "id": "metric_time__month",
+      "queryable": true,
+      "unresolved": null,
+      "passed": true
+    }
+  ],
+  "available": [
+    "home_store",
+    "home_store__region",
+    "home_store__store_name",
+    "member",
+    "member__tier",
+    "metric_time__day",
+    "metric_time__month"
+  ],
+  "per_metric": {
+    "monthly_paid_avg_order_value": {
+      "home_store": "home_store",
+      "member": "member",
+      "home_store__region": "member__home_store__region",
+      "home_store__store_name": "member__home_store__store_name",
+      "member__tier": "member__tier",
+      "metric_time__day": "metric_time__day",
+      "metric_time__month": "metric_time__month"
+    },
+    "monthly_paid_buyer_count": {
+      "home_store": "home_store",
+      "member": "member",
+      "home_store__region": "member__home_store__region",
+      "home_store__store_name": "member__home_store__store_name",
+      "member__tier": "member__tier",
+      "metric_time__day": "metric_time__day",
+      "metric_time__month": "metric_time__month"
+    },
+    "monthly_paid_order_count": {
+      "home_store": "home_store",
+      "member": "member",
+      "home_store__region": "member__home_store__region",
+      "home_store__store_name": "member__home_store__store_name",
+      "member__tier": "member__tier",
+      "metric_time__day": "metric_time__day",
+      "metric_time__month": "metric_time__month"
+    },
+    "monthly_paid_repeat_buyer_count": {
+      "home_store": "home_store",
+      "member": "member",
+      "home_store__region": "member__home_store__region",
+      "home_store__store_name": "member__home_store__store_name",
+      "member__tier": "member__tier",
+      "metric_time__day": "metric_time__day",
+      "metric_time__month": "metric_time__month"
+    },
+    "monthly_paid_repeat_rate": {
+      "home_store": "home_store",
+      "member": "member",
+      "home_store__region": "member__home_store__region",
+      "home_store__store_name": "member__home_store__store_name",
+      "member__tier": "member__tier",
+      "metric_time__day": "metric_time__day",
+      "metric_time__month": "metric_time__month"
+    },
+    "monthly_paid_sales_cents": {
+      "home_store": "home_store",
+      "member": "member",
+      "home_store__region": "member__home_store__region",
+      "home_store__store_name": "member__home_store__store_name",
+      "member__tier": "member__tier",
+      "metric_time__day": "metric_time__day",
+      "metric_time__month": "metric_time__month"
+    }
+  }
+}

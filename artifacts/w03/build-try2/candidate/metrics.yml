@@ -1,0 +1,133 @@
+version: 2
+semantic_models:
+- name: orders
+  model: ref('orders')
+  defaults:
+    agg_time_dimension: ordered_at
+  entities:
+  - name: order
+    type: primary
+    expr: order_id
+  - name: member
+    type: foreign
+    expr: member_id
+  - name: store
+    type: foreign
+    expr: store_id
+  dimensions:
+  - name: ordered_at
+    type: time
+    type_params:
+      time_granularity: day
+  - name: channel
+    type: categorical
+  - name: status
+    type: categorical
+- name: members
+  model: ref('members')
+  defaults:
+    agg_time_dimension: registered_at
+  entities:
+  - name: member
+    type: primary
+    expr: member_id
+  - name: home_store
+    type: foreign
+    expr: home_store_id
+  dimensions:
+  - name: registered_at
+    type: time
+    type_params:
+      time_granularity: day
+  - name: tier
+    type: categorical
+- name: order_store
+  model: ref('stores')
+  entities:
+  - name: store
+    type: primary
+    expr: store_id
+  dimensions:
+  - name: region
+    type: categorical
+  - name: store_name
+    type: categorical
+- name: member_home_store
+  model: ref('stores')
+  entities:
+  - name: home_store
+    type: primary
+    expr: store_id
+  dimensions:
+  - name: region
+    type: categorical
+  - name: store_name
+    type: categorical
+- name: paid_member_month_summary
+  model: ref('paid_member_month_summary')
+  defaults:
+    agg_time_dimension: month_start
+  entities:
+  - name: paid_member_month
+    type: primary
+    expr: paid_member_month_id
+  - name: member
+    type: foreign
+    expr: member_id
+  dimensions:
+  - name: month_start
+    type: time
+    type_params:
+      time_granularity: day
+  measures:
+  - name: paid_month_buyer_count_measure
+    expr: member_id
+    agg: count_distinct
+  - name: paid_month_order_count_measure
+    expr: valid_order_count
+    agg: sum
+  - name: paid_month_net_sales_cents_measure
+    expr: net_sales_cents
+    agg: sum
+  - name: paid_month_repeat_buyer_count_measure
+    expr: repeat_member_id
+    agg: count_distinct
+metrics:
+- name: monthly_paid_buyer_count
+  label: 月末付费会员购买人数
+  description: 自然月内有至少一笔有效订单、且月末符合总部运营月报付费资格的不同 CRM 会员账户数；按账户去重，不按卡重复。
+  type: simple
+  type_params:
+    measure: paid_month_buyer_count_measure
+- name: monthly_paid_order_count
+  label: 月末付费会员有效订单数
+  description: 月末符合付费资格的账户在该自然月的全部有效订单数，按账户资格筛选，不按卡重复。
+  type: simple
+  type_params:
+    measure: paid_month_order_count_measure
+- name: monthly_paid_sales_cents
+  label: 月末付费会员净销售额
+  description: 月末符合付费资格的账户在该自然月的有效订单净销售额合计，单位分。
+  type: simple
+  type_params:
+    measure: paid_month_net_sales_cents_measure
+- name: monthly_paid_repeat_buyer_count
+  label: 月末付费会员复购人数
+  description: 月末符合付费资格，且同一自然月至少有两笔有效订单的不同账户数。
+  type: simple
+  type_params:
+    measure: paid_month_repeat_buyer_count_measure
+- name: monthly_paid_repeat_rate
+  label: 月末付费会员复购率
+  description: 月末付费会员复购人数除以月末付费会员购买人数；分母为零时未定义。
+  type: ratio
+  type_params:
+    numerator: monthly_paid_repeat_buyer_count
+    denominator: monthly_paid_buyer_count
+- name: monthly_paid_avg_order_value
+  label: 月末付费会员订单均额
+  description: 月末付费会员净销售额除以月末付费会员有效订单数；单位分／单，分母零时未定义。
+  type: ratio
+  type_params:
+    numerator: monthly_paid_sales_cents
+    denominator: monthly_paid_order_count

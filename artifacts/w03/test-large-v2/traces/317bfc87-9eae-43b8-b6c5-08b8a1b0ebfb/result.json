@@ -1,0 +1,22 @@
+{
+  "status": "clarify",
+  "reason": "请提供要统计的有效订单数的时间范围（起止日期，end 不含；数据覆盖 2024-09-01 至 2026-09-01）。青禾是客户/数据集名称，未作为门店筛选。",
+  "intent": {
+    "status": "clarify",
+    "reason": "请提供要统计的有效订单数的时间范围（起止日期，end 不含；数据覆盖 2024-09-01 至 2026-09-01）。青禾是客户/数据集名称，未作为门店筛选。",
+    "metrics": [
+      "valid_order_count"
+    ],
+    "group_by": [],
+    "filters": []
+  },
+  "question": "青禾的有效订单数是多少？",
+  "trace_id": "317bfc87-9eae-43b8-b6c5-08b8a1b0ebfb",
+  "elapsed_seconds": 4.844,
+  "model_usage": {
+    "prompt_tokens": 311968,
+    "completion_tokens": 581,
+    "total_tokens": 312549
+  },
+  "model_calls_with_usage": 1
+}

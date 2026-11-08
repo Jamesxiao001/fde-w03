@@ -1,0 +1,134 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "new_member_count"
+    ],
+    "start": "2026-07-01",
+    "end": "2026-08-01",
+    "group_by": [
+      "home_store"
+    ],
+    "filters": []
+  },
+  "sql": "SELECT\n  home_store_id AS home_store\n  , COUNT(DISTINCT member_id) AS new_member_count\nFROM \"data\".\"main\".\"members\" members_src_10000\nWHERE DATE_TRUNC('day', registered_at) BETWEEN '2026-07-01' AND '2026-07-31'\nGROUP BY\n  home_store_id",
+  "columns": [
+    "home_store",
+    "new_member_count"
+  ],
+  "rows": [
+    [
+      "S08",
+      6
+    ],
+    [
+      "S15",
+      7
+    ],
+    [
+      "S05",
+      5
+    ],
+    [
+      "S19",
+      1
+    ],
+    [
+      "S04",
+      6
+    ],
+    [
+      "S13",
+      5
+    ],
+    [
+      "S02",
+      3
+    ],
+    [
+      "S18",
+      3
+    ],
+    [
+      "S03",
+      3
+    ],
+    [
+      "S07",
+      2
+    ],
+    [
+      "S16",
+      3
+    ],
+    [
+      "S11",
+      1
+    ],
+    [
+      "S23",
+      3
+    ],
+    [
+      "S12",
+      2
+    ],
+    [
+      "S17",
+      6
+    ],
+    [
+      "S24",
+      4
+    ],
+    [
+      "S14",
+      4
+    ],
+    [
+      "S01",
+      3
+    ],
+    [
+      "S20",
+      4
+    ],
+    [
+      "S21",
+      3
+    ],
+    [
+      "S22",
+      3
+    ],
+    [
+      "S10",
+      4
+    ],
+    [
+      "S09",
+      2
+    ],
+    [
+      "S06",
+      1
+    ]
+  ],
+  "seconds": 0.032,
+  "units": {
+    "new_member_count": "count"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "2d0f316b286de6e5958ff9d5c09e21fc8bf0ca11e598484f9526f1960c9ddaff",
+  "answer": "2026年7月（7月1日至7月31日）在青禾当前数据范围内，按会员归属门店统计，新增注册会员账户合计84个。各归属门店分别为：S01 3个、S02 3个、S03 3个、S04 6个、S05 5个、S06 1个、S07 2个、S08 6个、S09 2个、S10 4个、S11 1个、S12 2个、S13 5个、S14 4个、S15 7个、S16 3个、S17 6个、S18 3个、S19 1个、S20 4个、S21 3个、S22 3个、S23 3个、S24 4个。口径为按注册日期统计新注册的CRM会员账户数，并按会员归属门店分组；该数字不等于跨系统自然人人数去重后的结果。",
+  "question": "2026 年 7 月青禾按会员归属门店统计的注册会员数是多少？",
+  "trace_id": "e31d8ee1-9579-4a39-aeaa-5c9c1d2d1387",
+  "elapsed_seconds": 11.109,
+  "model_usage": {
+    "prompt_tokens": 314940,
+    "completion_tokens": 1256,
+    "total_tokens": 316196
+  },
+  "model_calls_with_usage": 2
+}

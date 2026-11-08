@@ -1,0 +1,74 @@
+[
+  {
+    "id": "valid_order_count",
+    "name": "有效订单数",
+    "aliases": [],
+    "unit": "count",
+    "constraints": [
+      "仅统计 paid 状态且实付金额减退款金额大于零的订单；取消和全额退款不计。"
+    ],
+    "sources": [
+      {
+        "file": "01_订单日报说明.md",
+        "quote": "状态为 paid 且实付金额减退款金额大于零的订单数；取消和全退不计。"
+      }
+    ],
+    "query_policy": {
+      "full_month_only": false
+    }
+  },
+  {
+    "id": "net_sales_cents",
+    "name": "净销售额",
+    "aliases": [],
+    "unit": "cents",
+    "constraints": [
+      "取消单不计；退款按原订单下单日期归属；金额单位为分。"
+    ],
+    "sources": [
+      {
+        "file": "01_订单日报说明.md",
+        "quote": "paid 订单实付减退款后合计；取消单不计；按原订单下单日期归属；单位分。"
+      }
+    ],
+    "query_policy": {
+      "full_month_only": false
+    }
+  },
+  {
+    "id": "buyer_count",
+    "name": "购买会员数",
+    "aliases": [],
+    "unit": "count",
+    "constraints": [
+      "按 CRM 会员账户去重，不跨系统自然人。"
+    ],
+    "sources": [
+      {
+        "file": "01_订单日报说明.md",
+        "quote": "统计窗口及筛选条件内有有效订单的不同 CRM 会员账户数，不做跨系统自然人去重。"
+      }
+    ],
+    "query_policy": {
+      "full_month_only": false
+    }
+  },
+  {
+    "id": "avg_order_value",
+    "name": "有效订单均额",
+    "aliases": [],
+    "unit": "cents_per_order",
+    "constraints": [
+      "分母为零时未定义。"
+    ],
+    "sources": [
+      {
+        "file": "02_财务邮件.md",
+        "quote": "净销售额除以有效订单数，单位分／单；分母零时未定义。"
+      }
+    ],
+    "query_policy": {
+      "full_month_only": false
+    }
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "status": "error",
+  "code": "MODEL_HTTP_402",
+  "reason": "本次调用未完成，请查看运行记录；不能把失败当成零。",
+  "question": "按门店看青禾 2026 年 7 月的净销售额是多少？",
+  "trace_id": "cf3c0e57-393f-4260-bc97-f2cd2e3940b0",
+  "elapsed_seconds": 0.719,
+  "model_usage": {},
+  "model_calls_with_usage": 0
+}

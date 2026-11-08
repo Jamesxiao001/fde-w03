@@ -1,0 +1,50 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "first_buyer_count",
+      "first_order_sales_cents",
+      "first_order_count",
+      "repeat_order_count"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  MAX(subq_10.first_buyer_count) AS first_buyer_count\n  , MAX(subq_10.first_order_sales_cents) AS first_order_sales_cents\n  , MAX(subq_10.first_order_count) AS first_order_count\n  , MAX(subq_17.repeat_order_count) AS repeat_order_count\nFROM (\n  SELECT\n    SUM(CASE WHEN member_id IS NOT NULL THEN 1 ELSE 0 END) AS first_buyer_count\n    , SUM(first_order_net_sales_cents) AS first_order_sales_cents\n    , SUM(CASE WHEN first_order_id IS NOT NULL THEN 1 ELSE 0 END) AS first_order_count\n  FROM \"data\".\"main\".\"member_first_valid_orders\" member_first_valid_orders_src_10000\n  WHERE DATE_TRUNC('day', first_ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'\n) subq_10\nCROSS JOIN (\n  SELECT\n    SUM(CASE WHEN valid_order_seq >= 2 THEN 1 ELSE 0 END) AS repeat_order_count\n  FROM \"data\".\"main\".\"valid_order_sequence\" valid_order_sequence_src_10000\n  WHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'\n) subq_17",
+  "columns": [
+    "first_buyer_count",
+    "first_order_sales_cents",
+    "first_order_count",
+    "repeat_order_count"
+  ],
+  "rows": [
+    [
+      5,
+      12800,
+      5,
+      22
+    ]
+  ],
+  "seconds": 0.047,
+  "units": {
+    "first_buyer_count": "count",
+    "first_order_sales_cents": "cents",
+    "first_order_count": "count",
+    "repeat_order_count": "count"
+  },
+  "data_version": "qinghe-w03-20260923-small",
+  "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+  "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+  "answer": "2026年8月（窗口为2026-08-01至2026-09-01前）在青禾当前CRM会员账户范围内汇总：观测期首购会员数5个账户；观测期首单净销售额128.00元（12800分）；观测期首单数5单；观测期后续购买订单数22单。口径上，首购会员数、首单数和首单净销售额均先用全测试覆盖期历史确定每个账户第一笔有效订单，再筛选首单日期落在该窗口的记录；后续购买订单数按全覆盖历史排序后第二笔及以后有效订单中，订单日期落在该窗口的订单数，不是复购人数。当前结果未按门店或地区拆分，也未应用额外筛选；数据为合成测试库，统计单位为CRM会员账户，不代表终身首购或跨系统自然人已去重。",
+  "question": "2026 年 8 月青禾的观测期首购会员数、观测期首单净销售额、观测期首单数和观测期后续购买订单数分别是多少？",
+  "trace_id": "ceb7bd0d-c422-4bbe-9818-cdb80cb48e3e",
+  "elapsed_seconds": 14.968,
+  "model_usage": {
+    "prompt_tokens": 12988,
+    "completion_tokens": 1903,
+    "total_tokens": 14891
+  },
+  "model_calls_with_usage": 2
+}

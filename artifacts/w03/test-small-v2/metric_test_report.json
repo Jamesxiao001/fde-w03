@@ -1,0 +1,1629 @@
+{
+  "contract_version": "w03-0.1.0",
+  "complete": true,
+  "passed": 20,
+  "total": 21,
+  "cases": [
+    {
+      "id": "c01-order-counts",
+      "question": "2026 年 8 月青禾的创建订单数、支付订单数、有效订单数和取消订单数分别是多少？",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "order_count",
+            "paid_order_count",
+            "valid_order_count",
+            "cancelled_order_count"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "columns": [
+          "order_count",
+          "paid_order_count",
+          "valid_order_count",
+          "cancelled_order_count"
+        ],
+        "rows": [
+          [
+            32,
+            30,
+            27,
+            2
+          ]
+        ],
+        "units": {
+          "order_count": "count",
+          "paid_order_count": "count",
+          "valid_order_count": "count",
+          "cancelled_order_count": "count"
+        },
+        "data_version": "qinghe-w03-20260923-small"
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "order_count",
+            "paid_order_count",
+            "valid_order_count",
+            "cancelled_order_count"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "sql": "SELECT\n  SUM(CASE WHEN order_id IS NOT NULL THEN 1 ELSE 0 END) AS order_count\n  , SUM(CASE WHEN status = 'paid' THEN 1 ELSE 0 END) AS paid_order_count\n  , SUM(CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN 1 ELSE 0 END) AS valid_order_count\n  , SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) AS cancelled_order_count\nFROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+        "columns": [
+          "order_count",
+          "paid_order_count",
+          "valid_order_count",
+          "cancelled_order_count"
+        ],
+        "rows": [
+          [
+            32,
+            30,
+            27,
+            2
+          ]
+        ],
+        "seconds": 0.047,
+        "units": {
+          "order_count": "count",
+          "paid_order_count": "count",
+          "valid_order_count": "count",
+          "cancelled_order_count": "count"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "在青禾当前客户数据范围内，2026年8月（按下单日期统计，覆盖8月1日至8月31日）：创建订单数32单、支付订单数30单、有效订单数27单、取消订单数2单。口径上，创建订单数包含取消单；支付订单数包含后来发生全部退款的订单；有效订单数仅计入已支付且实付金额减退款金额大于零的订单，取消和全退不计入；取消订单数为取消状态订单数。本次为合成测试数据，结果未按门店等维度拆分。",
+        "question": "2026 年 8 月青禾的创建订单数、支付订单数、有效订单数和取消订单数分别是多少？",
+        "trace_id": "d3bea24e-a99e-489f-ae83-08deeba95aa4",
+        "elapsed_seconds": 9.234,
+        "model_usage": {
+          "prompt_tokens": 12766,
+          "completion_tokens": 858,
+          "total_tokens": 13624
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c02-refund-orders",
+      "question": "2026 年 8 月青禾的退款订单数、部分退款订单数和全额退款订单数各是多少？",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "refund_order_count",
+            "partial_refund_order_count",
+            "full_refund_order_count"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "columns": [
+          "refund_order_count",
+          "partial_refund_order_count",
+          "full_refund_order_count"
+        ],
+        "rows": [
+          [
+            4,
+            1,
+            3
+          ]
+        ],
+        "units": {
+          "refund_order_count": "count",
+          "partial_refund_order_count": "count",
+          "full_refund_order_count": "count"
+        }
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "refund_order_count",
+            "partial_refund_order_count",
+            "full_refund_order_count"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "sql": "SELECT\n  SUM(CASE WHEN status = 'paid' AND refund_cents > 0 THEN 1 ELSE 0 END) AS refund_order_count\n  , SUM(CASE WHEN status = 'paid' AND refund_cents > 0 AND refund_cents < paid_cents THEN 1 ELSE 0 END) AS partial_refund_order_count\n  , SUM(CASE WHEN status = 'paid' AND paid_cents > 0 AND refund_cents = paid_cents THEN 1 ELSE 0 END) AS full_refund_order_count\nFROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+        "columns": [
+          "refund_order_count",
+          "partial_refund_order_count",
+          "full_refund_order_count"
+        ],
+        "rows": [
+          [
+            4,
+            1,
+            3
+          ]
+        ],
+        "seconds": 0.032,
+        "units": {
+          "refund_order_count": "count",
+          "partial_refund_order_count": "count",
+          "full_refund_order_count": "count"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "青禾在 2026 年 8 月（8 月 1 日至 9 月 1 日前）的退款订单共 4 笔，其中部分退款订单 1 笔、全额退款订单 3 笔。退款订单口径为已支付且退款金额大于零的订单，包含部分退款和全额退款；以上均按订单笔数统计，不是会员账户数。数据基于当前合成测试数据版本。",
+        "question": "2026 年 8 月青禾的退款订单数、部分退款订单数和全额退款订单数各是多少？",
+        "trace_id": "32b1ccb8-a613-4ec0-b081-b2f75acbdd87",
+        "elapsed_seconds": 8.938,
+        "model_usage": {
+          "prompt_tokens": 12683,
+          "completion_tokens": 707,
+          "total_tokens": 13390
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c03-amounts",
+      "question": "2026 年 8 月青禾的实付金额、退款金额、净销售额、支付订单原价金额和优惠金额分别是多少？",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "payment_cents",
+            "refund_cents",
+            "net_sales_cents",
+            "gross_cents",
+            "discount_cents"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "columns": [
+          "payment_cents",
+          "refund_cents",
+          "net_sales_cents",
+          "gross_cents",
+          "discount_cents"
+        ],
+        "rows": [
+          [
+            119050,
+            18750,
+            100300,
+            124250,
+            5200
+          ]
+        ],
+        "units": {
+          "payment_cents": "cents",
+          "refund_cents": "cents",
+          "net_sales_cents": "cents",
+          "gross_cents": "cents",
+          "discount_cents": "cents"
+        }
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "payment_cents",
+            "refund_cents",
+            "net_sales_cents",
+            "gross_cents",
+            "discount_cents"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "sql": "SELECT\n  SUM(CASE WHEN status = 'paid' THEN paid_cents ELSE 0 END) AS payment_cents\n  , SUM(CASE WHEN status = 'paid' THEN refund_cents ELSE 0 END) AS refund_cents\n  , SUM(CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END) AS net_sales_cents\n  , SUM(CASE WHEN status = 'paid' THEN gross_cents ELSE 0 END) AS gross_cents\n  , SUM(CASE WHEN status = 'paid' THEN gross_cents - paid_cents ELSE 0 END) AS discount_cents\nFROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+        "columns": [
+          "payment_cents",
+          "refund_cents",
+          "net_sales_cents",
+          "gross_cents",
+          "discount_cents"
+        ],
+        "rows": [
+          [
+            119050,
+            18750,
+            100300,
+            124250,
+            5200
+          ]
+        ],
+        "seconds": 0.047,
+        "units": {
+          "payment_cents": "cents",
+          "refund_cents": "cents",
+          "net_sales_cents": "cents",
+          "gross_cents": "cents",
+          "discount_cents": "cents"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "统计范围为青禾客户在 2026 年 8 月（按下单日期归属）的已支付订单，未做额外分组。结果：实付金额 1190.50 元；退款金额 187.50 元；净销售额 1003.00 元；支付订单原价金额 1242.50 元；优惠金额 52.00 元。口径上，实付金额尚未扣退款，净销售额为实付减退款，退款按原订单下单日期归属而非现金退款发生日，取消单不计入净销售额，退款也不冲减原优惠金额。",
+        "question": "2026 年 8 月青禾的实付金额、退款金额、净销售额、支付订单原价金额和优惠金额分别是多少？",
+        "trace_id": "be8e3d0d-cb73-41f8-b084-29234f4c9541",
+        "elapsed_seconds": 10.422,
+        "model_usage": {
+          "prompt_tokens": 12917,
+          "completion_tokens": 965,
+          "total_tokens": 13882
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c04-distinct",
+      "question": "2026 年 8 月青禾的购买会员数、退款会员数、成交门店数和有效订单商品件数分别是多少？",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "buyer_count",
+            "refund_buyer_count",
+            "selling_store_count",
+            "valid_order_items"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "columns": [
+          "buyer_count",
+          "refund_buyer_count",
+          "selling_store_count",
+          "valid_order_items"
+        ],
+        "rows": [
+          [
+            15,
+            4,
+            2,
+            33
+          ]
+        ],
+        "units": {
+          "buyer_count": "count",
+          "refund_buyer_count": "count",
+          "selling_store_count": "count",
+          "valid_order_items": "items"
+        }
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "buyer_count",
+            "refund_buyer_count",
+            "selling_store_count",
+            "valid_order_items"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "sql": "SELECT\n  COUNT(DISTINCT CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN member_id ELSE NULL END) AS buyer_count\n  , COUNT(DISTINCT CASE WHEN status = 'paid' AND refund_cents > 0 THEN member_id ELSE NULL END) AS refund_buyer_count\n  , COUNT(DISTINCT CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN store_id ELSE NULL END) AS selling_store_count\n  , SUM(CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN quantity ELSE 0 END) AS valid_order_items\nFROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+        "columns": [
+          "buyer_count",
+          "refund_buyer_count",
+          "selling_store_count",
+          "valid_order_items"
+        ],
+        "rows": [
+          [
+            15,
+            4,
+            2,
+            33
+          ]
+        ],
+        "seconds": 0.047,
+        "units": {
+          "buyer_count": "count",
+          "refund_buyer_count": "count",
+          "selling_store_count": "count",
+          "valid_order_items": "items"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "在青禾当前客户范围内，统计窗口为 2026 年 8 月整月，汇总结果为：购买会员数 15 个 CRM 会员账户；退款会员数 4 个 CRM 会员账户；成交门店数 2 家（订单成交门店）；有效订单商品件数 33 件。口径说明：购买会员数按有有效订单的不同会员账户统计，不做跨系统自然人去重；退款会员数按发生退款的已支付订单关联的不同会员账户统计；成交门店数按至少有一笔有效订单的不同订单归属门店统计；有效订单商品件数为有效订单原始购买件数合计，不是扣除退款后的净销量，且退款金额不能推算退货件数。本次未按门店或会员分组，以上为汇总值。",
+        "question": "2026 年 8 月青禾的购买会员数、退款会员数、成交门店数和有效订单商品件数分别是多少？",
+        "trace_id": "3f7e60d4-4d30-4d64-947b-765fa46196cf",
+        "elapsed_seconds": 11.297,
+        "model_usage": {
+          "prompt_tokens": 12793,
+          "completion_tokens": 1174,
+          "total_tokens": 13967
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c05-ratios-a",
+      "question": "2026 年 8 月青禾的有效订单均额、购买会员人均消费、购买频次和单均商品件数是多少？",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "avg_order_value",
+            "avg_buyer_value",
+            "purchase_frequency",
+            "items_per_order"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "columns": [
+          "avg_order_value",
+          "avg_buyer_value",
+          "purchase_frequency",
+          "items_per_order"
+        ],
+        "rows": [
+          [
+            3714.814814814815,
+            6686.666666666667,
+            1.8,
+            1.2222222222222223
+          ]
+        ],
+        "units": {
+          "avg_order_value": "cents_per_order",
+          "avg_buyer_value": "cents_per_member",
+          "purchase_frequency": "orders_per_member",
+          "items_per_order": "items_per_order"
+        }
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "avg_order_value",
+            "avg_buyer_value",
+            "purchase_frequency",
+            "items_per_order"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "sql": "SELECT\n  CAST(SUM(CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END) AS DOUBLE) / CAST(NULLIF(SUM(CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN 1 ELSE 0 END), 0) AS DOUBLE) AS avg_order_value\n  , CAST(SUM(CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END) AS DOUBLE) / CAST(NULLIF(COUNT(DISTINCT CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN member_id ELSE NULL END), 0) AS DOUBLE) AS avg_buyer_value\n  , CAST(SUM(CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN 1 ELSE 0 END) AS DOUBLE) / CAST(NULLIF(COUNT(DISTINCT CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN member_id ELSE NULL END), 0) AS DOUBLE) AS purchase_frequency\n  , CAST(SUM(CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN quantity ELSE 0 END) AS DOUBLE) / CAST(NULLIF(SUM(CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN 1 ELSE 0 END), 0) AS DOUBLE) AS items_per_order\nFROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+        "columns": [
+          "avg_order_value",
+          "avg_buyer_value",
+          "purchase_frequency",
+          "items_per_order"
+        ],
+        "rows": [
+          [
+            3714.814814814815,
+            6686.666666666667,
+            1.8,
+            1.2222222222222223
+          ]
+        ],
+        "seconds": 0.047,
+        "units": {
+          "avg_order_value": "cents_per_order",
+          "avg_buyer_value": "cents_per_member",
+          "purchase_frequency": "orders_per_member",
+          "items_per_order": "items_per_order"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "统计范围为 2026 年 8 月（2026-08-01 至 2026-09-01，结束日不计）青禾当前客户数据，按 CRM 会员账户口径计算；未按门店或地区分组，也未附加其他筛选。结果：有效订单均额 37.15 元/单；购买会员人均消费 66.87 元/账户；购买频次 1.80 单/账户；单均商品件数 1.22 件/单。金额由分换算为元并保留两位小数。以上基于本周合成测试库，数据覆盖至 2026-09-01；相关指标在分母为零时未定义，本次结果均已返回数值。",
+        "question": "2026 年 8 月青禾的有效订单均额、购买会员人均消费、购买频次和单均商品件数是多少？",
+        "trace_id": "3ac6a504-b231-40e6-bdde-d45e3922710d",
+        "elapsed_seconds": 10.39,
+        "model_usage": {
+          "prompt_tokens": 12858,
+          "completion_tokens": 1041,
+          "total_tokens": 13899
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c06-ratios-b",
+      "question": "2026 年 8 月青禾的退款金额占比、取消率、退款订单率和优惠率是多少？",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "refund_amount_rate",
+            "cancel_rate",
+            "refund_order_rate",
+            "discount_rate"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "columns": [
+          "refund_amount_rate",
+          "cancel_rate",
+          "refund_order_rate",
+          "discount_rate"
+        ],
+        "rows": [
+          [
+            0.15749685006299874,
+            0.0625,
+            0.13333333333333333,
+            0.041851106639839035
+          ]
+        ],
+        "units": {
+          "refund_amount_rate": "ratio",
+          "cancel_rate": "ratio",
+          "refund_order_rate": "ratio",
+          "discount_rate": "ratio"
+        }
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "refund_amount_rate",
+            "cancel_rate",
+            "refund_order_rate",
+            "discount_rate"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "sql": "SELECT\n  CAST(SUM(CASE WHEN status = 'paid' THEN refund_cents ELSE 0 END) AS DOUBLE) / CAST(NULLIF(SUM(CASE WHEN status = 'paid' THEN paid_cents ELSE 0 END), 0) AS DOUBLE) AS refund_amount_rate\n  , CAST(SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) AS DOUBLE) / CAST(NULLIF(SUM(CASE WHEN order_id IS NOT NULL THEN 1 ELSE 0 END), 0) AS DOUBLE) AS cancel_rate\n  , CAST(SUM(CASE WHEN status = 'paid' AND refund_cents > 0 THEN 1 ELSE 0 END) AS DOUBLE) / CAST(NULLIF(SUM(CASE WHEN status = 'paid' THEN 1 ELSE 0 END), 0) AS DOUBLE) AS refund_order_rate\n  , CAST(SUM(CASE WHEN status = 'paid' THEN gross_cents - paid_cents ELSE 0 END) AS DOUBLE) / CAST(NULLIF(SUM(CASE WHEN status = 'paid' THEN gross_cents ELSE 0 END), 0) AS DOUBLE) AS discount_rate\nFROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+        "columns": [
+          "refund_amount_rate",
+          "cancel_rate",
+          "refund_order_rate",
+          "discount_rate"
+        ],
+        "rows": [
+          [
+            0.15749685006299874,
+            0.0625,
+            0.13333333333333333,
+            0.041851106639839035
+          ]
+        ],
+        "seconds": 0.047,
+        "units": {
+          "refund_amount_rate": "ratio",
+          "cancel_rate": "ratio",
+          "refund_order_rate": "ratio",
+          "discount_rate": "ratio"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "青禾 2026 年 8 月（2026-08-01 至 2026-09-01）的统计结果为：退款金额占比 15.75%；取消率 6.25%；退款订单率 13.33%；优惠率 4.19%。本次按当前客户范围统计，未按门店等维度拆分，也未额外添加门店筛选。口径分别为：退款金额/实付金额、取消订单数/创建订单数、退款订单数/支付订单数、优惠金额/支付订单原价金额；本次结果均正常返回，未出现因分母为零而导致的未定义情况。",
+        "question": "2026 年 8 月青禾的退款金额占比、取消率、退款订单率和优惠率是多少？",
+        "trace_id": "151e2dd4-18e8-46b6-8d06-9a5443f5ce3b",
+        "elapsed_seconds": 8.297,
+        "model_usage": {
+          "prompt_tokens": 12800,
+          "completion_tokens": 748,
+          "total_tokens": 13548
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c07-new-members-home",
+      "question": "2026 年 7 月青禾按会员归属门店统计的注册会员数是多少？",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "new_member_count"
+          ],
+          "start": "2026-07-01",
+          "end": "2026-08-01",
+          "group_by": [
+            "home_store"
+          ],
+          "filters": []
+        },
+        "columns": [
+          "home_store",
+          "new_member_count"
+        ],
+        "rows": [
+          [
+            "S01",
+            6
+          ],
+          [
+            "S02",
+            6
+          ]
+        ],
+        "units": {
+          "new_member_count": "count"
+        }
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "new_member_count"
+          ],
+          "start": "2026-07-01",
+          "end": "2026-08-01",
+          "group_by": [
+            "home_store"
+          ],
+          "filters": []
+        },
+        "sql": "SELECT\n  home_store\n  , SUM(__new_member_count) AS new_member_count\nFROM (\n  SELECT\n    home_store_id AS home_store\n    , CASE WHEN member_id IS NOT NULL THEN 1 ELSE 0 END AS __new_member_count\n  FROM \"data\".\"main\".\"members\" members_src_10000\n  WHERE DATE_TRUNC('day', registered_at) BETWEEN '2026-07-01' AND '2026-07-31'\n) subq_5\nGROUP BY\n  home_store",
+        "columns": [
+          "home_store",
+          "new_member_count"
+        ],
+        "rows": [
+          [
+            "S01",
+            6
+          ],
+          [
+            "S02",
+            6
+          ]
+        ],
+        "seconds": 0.016,
+        "units": {
+          "new_member_count": "count"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "统计口径为：在青禾当前已加载的 CRM 会员账户数据范围内，按注册日期统计 2026 年 7 月整月新注册的会员账户，并按会员归属门店分组，而非按订单成交门店统计；注册会员账户数不等同于自然人数。结果中列出的会员归属门店为 S01 和 S02：S01 为 6 个账户，S02 为 6 个账户，列出的分组合计为 12 个账户。未列出的会员归属门店不能由本结果推断为零或未定义。",
+        "question": "2026 年 7 月青禾按会员归属门店统计的注册会员数是多少？",
+        "trace_id": "c26c5b2c-d78d-4ed3-91d1-fa1c29ef6e3e",
+        "elapsed_seconds": 12.281,
+        "model_usage": {
+          "prompt_tokens": 12472,
+          "completion_tokens": 1314,
+          "total_tokens": 13786
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c08-first-repeat",
+      "question": "2026 年 8 月青禾的观测期首购会员数、观测期首单净销售额、观测期首单数和观测期后续购买订单数分别是多少？",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "first_buyer_count",
+            "first_order_sales_cents",
+            "first_order_count",
+            "repeat_order_count"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "columns": [
+          "first_buyer_count",
+          "first_order_sales_cents",
+          "first_order_count",
+          "repeat_order_count"
+        ],
+        "rows": [
+          [
+            5,
+            12800,
+            5,
+            22
+          ]
+        ],
+        "units": {
+          "first_buyer_count": "count",
+          "first_order_sales_cents": "cents",
+          "first_order_count": "count",
+          "repeat_order_count": "count"
+        }
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "first_buyer_count",
+            "first_order_sales_cents",
+            "first_order_count",
+            "repeat_order_count"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "sql": "SELECT\n  MAX(subq_10.first_buyer_count) AS first_buyer_count\n  , MAX(subq_10.first_order_sales_cents) AS first_order_sales_cents\n  , MAX(subq_10.first_order_count) AS first_order_count\n  , MAX(subq_17.repeat_order_count) AS repeat_order_count\nFROM (\n  SELECT\n    SUM(CASE WHEN member_id IS NOT NULL THEN 1 ELSE 0 END) AS first_buyer_count\n    , SUM(first_order_net_sales_cents) AS first_order_sales_cents\n    , SUM(CASE WHEN first_order_id IS NOT NULL THEN 1 ELSE 0 END) AS first_order_count\n  FROM \"data\".\"main\".\"member_first_valid_orders\" member_first_valid_orders_src_10000\n  WHERE DATE_TRUNC('day', first_ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'\n) subq_10\nCROSS JOIN (\n  SELECT\n    SUM(CASE WHEN valid_order_seq >= 2 THEN 1 ELSE 0 END) AS repeat_order_count\n  FROM \"data\".\"main\".\"valid_order_sequence\" valid_order_sequence_src_10000\n  WHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'\n) subq_17",
+        "columns": [
+          "first_buyer_count",
+          "first_order_sales_cents",
+          "first_order_count",
+          "repeat_order_count"
+        ],
+        "rows": [
+          [
+            5,
+            12800,
+            5,
+            22
+          ]
+        ],
+        "seconds": 0.047,
+        "units": {
+          "first_buyer_count": "count",
+          "first_order_sales_cents": "cents",
+          "first_order_count": "count",
+          "repeat_order_count": "count"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "2026年8月（窗口为2026-08-01至2026-09-01前）在青禾当前CRM会员账户范围内汇总：观测期首购会员数5个账户；观测期首单净销售额128.00元（12800分）；观测期首单数5单；观测期后续购买订单数22单。口径上，首购会员数、首单数和首单净销售额均先用全测试覆盖期历史确定每个账户第一笔有效订单，再筛选首单日期落在该窗口的记录；后续购买订单数按全覆盖历史排序后第二笔及以后有效订单中，订单日期落在该窗口的订单数，不是复购人数。当前结果未按门店或地区拆分，也未应用额外筛选；数据为合成测试库，统计单位为CRM会员账户，不代表终身首购或跨系统自然人已去重。",
+        "question": "2026 年 8 月青禾的观测期首购会员数、观测期首单净销售额、观测期首单数和观测期后续购买订单数分别是多少？",
+        "trace_id": "ceb7bd0d-c422-4bbe-9818-cdb80cb48e3e",
+        "elapsed_seconds": 14.968,
+        "model_usage": {
+          "prompt_tokens": 12988,
+          "completion_tokens": 1903,
+          "total_tokens": 14891
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c09-monthly-by-month",
+      "question": "青禾 2026 年 7 月和 8 月的月内购买会员数、月内复购会员数和月内复购率，按月分别列出。",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "monthly_buyer_count",
+            "monthly_repeat_buyer_count",
+            "monthly_repeat_rate"
+          ],
+          "start": "2026-07-01",
+          "end": "2026-09-01",
+          "group_by": [
+            "metric_time__month"
+          ],
+          "filters": []
+        },
+        "columns": [
+          "metric_time__month",
+          "monthly_buyer_count",
+          "monthly_repeat_buyer_count",
+          "monthly_repeat_rate"
+        ],
+        "rows": [
+          [
+            "2026-07-01",
+            11,
+            1,
+            0.09090909090909091
+          ],
+          [
+            "2026-08-01",
+            15,
+            12,
+            0.8
+          ]
+        ],
+        "units": {
+          "monthly_buyer_count": "count",
+          "monthly_repeat_buyer_count": "count",
+          "monthly_repeat_rate": "ratio"
+        }
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "monthly_buyer_count",
+            "monthly_repeat_buyer_count",
+            "monthly_repeat_rate"
+          ],
+          "start": "2026-07-01",
+          "end": "2026-09-01",
+          "group_by": [
+            "metric_time__month"
+          ],
+          "filters": []
+        },
+        "sql": "WITH sma_10003_cte AS (\n  SELECT\n    DATE_TRUNC('day', activity_month) AS metric_time__day\n    , DATE_TRUNC('month', activity_month) AS metric_time__month\n    , CASE WHEN monthly_member_activity_id IS NOT NULL THEN 1 ELSE 0 END AS __monthly_buyer_count\n    , CASE WHEN valid_order_count >= 2 THEN 1 ELSE 0 END AS __monthly_repeat_buyer_count\n  FROM \"data\".\"main\".\"monthly_member_activity\" monthly_member_activity_src_10000\n)\n\nSELECT\n  COALESCE(subq_8.metric_time__month, subq_14.metric_time__month) AS metric_time__month\n  , MAX(subq_8.monthly_buyer_count) AS monthly_buyer_count\n  , MAX(subq_8.monthly_repeat_buyer_count) AS monthly_repeat_buyer_count\n  , MAX(CAST(subq_14.monthly_repeat_buyer_count AS DOUBLE) / CAST(NULLIF(subq_14.monthly_buyer_count, 0) AS DOUBLE)) AS monthly_repeat_rate\nFROM (\n  SELECT\n    metric_time__month\n    , SUM(__monthly_buyer_count) AS monthly_buyer_count\n    , SUM(__monthly_repeat_buyer_count) AS monthly_repeat_buyer_count\n  FROM sma_10003_cte\n  WHERE metric_time__day BETWEEN '2026-07-01' AND '2026-08-31'\n  GROUP BY\n    metric_time__month\n) subq_8\nFULL OUTER JOIN (\n  SELECT\n    metric_time__month\n    , SUM(__monthly_repeat_buyer_count) AS monthly_repeat_buyer_count\n    , SUM(__monthly_buyer_count) AS monthly_buyer_count\n  FROM sma_10003_cte\n  WHERE metric_time__day BETWEEN '2026-07-01' AND '2026-08-31'\n  GROUP BY\n    metric_time__month\n) subq_14\nON\n  subq_8.metric_time__month = subq_14.metric_time__month\nGROUP BY\n  COALESCE(subq_8.metric_time__month, subq_14.metric_time__month)",
+        "columns": [
+          "metric_time__month",
+          "monthly_buyer_count",
+          "monthly_repeat_buyer_count",
+          "monthly_repeat_rate"
+        ],
+        "rows": [
+          [
+            "2026-07-01 00:00:00",
+            11,
+            1,
+            0.09090909090909091
+          ],
+          [
+            "2026-08-01 00:00:00",
+            15,
+            12,
+            0.8
+          ]
+        ],
+        "seconds": 0.032,
+        "units": {
+          "monthly_buyer_count": "count",
+          "monthly_repeat_buyer_count": "count",
+          "monthly_repeat_rate": "ratio"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "统计范围为青禾当前数据范围内、全门店口径的完整自然月数据，按 2026 年 7 月和 8 月分别统计；人数单位为 CRM 会员账户数。结果：2026 年 7 月月内购买会员数 11 户、月内复购会员数 1 户，月内复购率 9.09%；2026 年 8 月月内购买会员数 15 户、月内复购会员数 12 户，月内复购率 80.00%。月内复购率为同月月内复购会员数除以月内购买会员数。上述人数为按月口径，不能将两个月人数直接相加当作跨月去重人数。",
+        "question": "青禾 2026 年 7 月和 8 月的月内购买会员数、月内复购会员数和月内复购率，按月分别列出。",
+        "trace_id": "f315bbce-1e5c-45ad-96f0-7e5cbddbbb0c",
+        "elapsed_seconds": 9.406,
+        "model_usage": {
+          "prompt_tokens": 12928,
+          "completion_tokens": 916,
+          "total_tokens": 13844
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c10-paid-a",
+      "question": "2026 年 8 月青禾月末付费会员购买人数、月末付费会员有效订单数和月末付费会员净销售额分别是多少？",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "monthly_paid_buyer_count",
+            "monthly_paid_order_count",
+            "monthly_paid_sales_cents"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "columns": [
+          "monthly_paid_buyer_count",
+          "monthly_paid_order_count",
+          "monthly_paid_sales_cents"
+        ],
+        "rows": [
+          [
+            6,
+            10,
+            47550
+          ]
+        ],
+        "units": {
+          "monthly_paid_buyer_count": "count",
+          "monthly_paid_order_count": "count",
+          "monthly_paid_sales_cents": "cents"
+        },
+        "data_version": "qinghe-w03-20260923-small"
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "monthly_paid_buyer_count",
+            "monthly_paid_order_count",
+            "monthly_paid_sales_cents"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "sql": "SELECT\n  SUM(CASE WHEN monthly_paid_member_activity_id IS NOT NULL THEN 1 ELSE 0 END) AS monthly_paid_buyer_count\n  , SUM(valid_order_count) AS monthly_paid_order_count\n  , SUM(net_sales_cents) AS monthly_paid_sales_cents\nFROM \"data\".\"main\".\"monthly_paid_member_activity\" monthly_paid_member_activity_src_10000\nWHERE DATE_TRUNC('day', activity_month) BETWEEN '2026-08-01' AND '2026-08-31'",
+        "columns": [
+          "monthly_paid_buyer_count",
+          "monthly_paid_order_count",
+          "monthly_paid_sales_cents"
+        ],
+        "rows": [
+          [
+            6,
+            10,
+            47550
+          ]
+        ],
+        "seconds": 0.047,
+        "units": {
+          "monthly_paid_buyer_count": "count",
+          "monthly_paid_order_count": "count",
+          "monthly_paid_sales_cents": "cents"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "青禾客户范围内，2026年8月完整自然月、全渠道全门店汇总口径下：月末付费会员购买人数为 6 个 CRM 会员账户，月末付费会员有效订单数为 10 笔，月末付费会员净销售额为 475.50 元。口径为：按2026年8月月末最后一天账户名下存在有效悦享年卡或家庭季卡判定付费资格，同一账户不按卡重复；购买人数为符合资格且当月有至少一笔有效订单的不同账户数，订单数和净销售额分别统计这些账户当月全部有效订单的笔数与净销售额合计。数据来自本周合成测试库。",
+        "question": "2026 年 8 月青禾月末付费会员购买人数、月末付费会员有效订单数和月末付费会员净销售额分别是多少？",
+        "trace_id": "e49d77ae-99df-42b7-a357-23edb72873ba",
+        "elapsed_seconds": 10.047,
+        "model_usage": {
+          "prompt_tokens": 13392,
+          "completion_tokens": 921,
+          "total_tokens": 14313
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c11-paid-b",
+      "question": "2026 年 8 月青禾月末付费会员复购人数、月末付费会员复购率和月末付费会员订单均额是多少？",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "monthly_paid_repeat_buyer_count",
+            "monthly_paid_repeat_rate",
+            "monthly_paid_avg_order_value"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "columns": [
+          "monthly_paid_repeat_buyer_count",
+          "monthly_paid_repeat_rate",
+          "monthly_paid_avg_order_value"
+        ],
+        "rows": [
+          [
+            4,
+            0.6666666666666666,
+            4755.0
+          ]
+        ],
+        "units": {
+          "monthly_paid_repeat_buyer_count": "count",
+          "monthly_paid_repeat_rate": "ratio",
+          "monthly_paid_avg_order_value": "cents_per_order"
+        }
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "monthly_paid_repeat_buyer_count",
+            "monthly_paid_repeat_rate",
+            "monthly_paid_avg_order_value"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "sql": "WITH sma_10004_cte AS (\n  SELECT\n    DATE_TRUNC('day', activity_month) AS metric_time__day\n    , CASE WHEN monthly_paid_member_activity_id IS NOT NULL THEN 1 ELSE 0 END AS __monthly_paid_buyer_count\n    , valid_order_count AS __monthly_paid_order_count\n    , net_sales_cents AS __monthly_paid_sales_cents\n    , CASE WHEN valid_order_count >= 2 THEN 1 ELSE 0 END AS __monthly_paid_repeat_buyer_count\n  FROM \"data\".\"main\".\"monthly_paid_member_activity\" monthly_paid_member_activity_src_10000\n)\n\nSELECT\n  MAX(subq_10.monthly_paid_repeat_buyer_count) AS monthly_paid_repeat_buyer_count\n  , MAX(subq_17.monthly_paid_repeat_rate) AS monthly_paid_repeat_rate\n  , MAX(subq_17.monthly_paid_avg_order_value) AS monthly_paid_avg_order_value\nFROM (\n  SELECT\n    SUM(__monthly_paid_repeat_buyer_count) AS monthly_paid_repeat_buyer_count\n  FROM sma_10004_cte\n  WHERE metric_time__day BETWEEN '2026-08-01' AND '2026-08-31'\n) subq_10\nCROSS JOIN (\n  SELECT\n    CAST(SUM(__monthly_paid_repeat_buyer_count) AS DOUBLE) / CAST(NULLIF(SUM(__monthly_paid_buyer_count), 0) AS DOUBLE) AS monthly_paid_repeat_rate\n    , CAST(SUM(__monthly_paid_sales_cents) AS DOUBLE) / CAST(NULLIF(SUM(__monthly_paid_order_count), 0) AS DOUBLE) AS monthly_paid_avg_order_value\n  FROM sma_10004_cte\n  WHERE metric_time__day BETWEEN '2026-08-01' AND '2026-08-31'\n) subq_17",
+        "columns": [
+          "monthly_paid_repeat_buyer_count",
+          "monthly_paid_repeat_rate",
+          "monthly_paid_avg_order_value"
+        ],
+        "rows": [
+          [
+            4,
+            0.6666666666666666,
+            4755.0
+          ]
+        ],
+        "seconds": 0.047,
+        "units": {
+          "monthly_paid_repeat_buyer_count": "count",
+          "monthly_paid_repeat_rate": "ratio",
+          "monthly_paid_avg_order_value": "cents_per_order"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "2026年8月（8月1日至8月31日完整自然月）青禾客户口径下：月末付费会员复购人数为4个CRM会员账户；月末付费会员复购率为66.67%；月末付费会员订单均额为47.55元/单。口径为全渠道、全门店整体汇总，不按门店或渠道拆分；付费资格按8月月末最后一天账户名下存在有效悦享年卡或家庭季卡判定，同一账户不按卡重复计算。复购人数指符合月末付费资格且同一自然月至少有两笔有效订单的不同账户数；复购率以复购人数除以月末付费会员购买人数计算，分母为零时未定义，本期结果已给出；订单均额以月末付费会员净销售额除以有效订单数计算，分母为零时未定义，本期结果已给出。数据为合成测试库，覆盖范围为2024-09-01至2026-09-01，本轮结果处于青禾客户数据范围内。",
+        "question": "2026 年 8 月青禾月末付费会员复购人数、月末付费会员复购率和月末付费会员订单均额是多少？",
+        "trace_id": "94254b4a-0554-47d4-8c8a-585f669e0fa8",
+        "elapsed_seconds": 12.281,
+        "model_usage": {
+          "prompt_tokens": 13437,
+          "completion_tokens": 1333,
+          "total_tokens": 14770
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c12-net-by-selling-store",
+      "question": "2026 年 7 月青禾按订单成交门店统计的净销售额是多少？",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "net_sales_cents"
+          ],
+          "start": "2026-07-01",
+          "end": "2026-08-01",
+          "group_by": [
+            "store"
+          ],
+          "filters": []
+        },
+        "columns": [
+          "store",
+          "net_sales_cents"
+        ],
+        "rows": [
+          [
+            "S01",
+            12500
+          ],
+          [
+            "S02",
+            10000
+          ],
+          [
+            "S03",
+            9000
+          ]
+        ],
+        "units": {
+          "net_sales_cents": "cents"
+        }
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "net_sales_cents"
+          ],
+          "start": "2026-07-01",
+          "end": "2026-08-01",
+          "group_by": [
+            "store"
+          ],
+          "filters": []
+        },
+        "sql": "SELECT\n  store\n  , SUM(__net_sales_cents) AS net_sales_cents\nFROM (\n  SELECT\n    store_id AS store\n    , CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END AS __net_sales_cents\n  FROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\n  WHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-07-01' AND '2026-07-31'\n) subq_5\nGROUP BY\n  store",
+        "columns": [
+          "store",
+          "net_sales_cents"
+        ],
+        "rows": [
+          [
+            "S03",
+            9000
+          ],
+          [
+            "S01",
+            12500
+          ],
+          [
+            "S02",
+            10000
+          ]
+        ],
+        "seconds": 0.015,
+        "units": {
+          "net_sales_cents": "cents"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "按订单成交门店口径统计，青禾在 2026 年 7 月的净销售额合计为 315.00 元。其中：S03 门店 90.00 元，S01 门店 125.00 元，S02 门店 100.00 元。统计口径为已支付订单实付金额减退款，取消单不计，并按原订单下单日期归属到 2026 年 7 月；以上为当前测试数据范围内按订单成交门店分组的合计结果。",
+        "question": "2026 年 7 月青禾按订单成交门店统计的净销售额是多少？",
+        "trace_id": "16d8d2b7-24aa-4d8f-a6e3-f6e773677b42",
+        "elapsed_seconds": 10.015,
+        "model_usage": {
+          "prompt_tokens": 12481,
+          "completion_tokens": 901,
+          "total_tokens": 13382
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c13-net-by-home-store",
+      "question": "2026 年 7 月青禾按会员归属门店统计的净销售额是多少？",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "net_sales_cents"
+          ],
+          "start": "2026-07-01",
+          "end": "2026-08-01",
+          "group_by": [
+            "home_store"
+          ],
+          "filters": []
+        },
+        "columns": [
+          "home_store",
+          "net_sales_cents"
+        ],
+        "rows": [
+          [
+            "S01",
+            4500
+          ],
+          [
+            "S02",
+            18000
+          ],
+          [
+            "S03",
+            9000
+          ]
+        ],
+        "units": {
+          "net_sales_cents": "cents"
+        }
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "net_sales_cents"
+          ],
+          "start": "2026-07-01",
+          "end": "2026-08-01",
+          "group_by": [
+            "home_store"
+          ],
+          "filters": []
+        },
+        "sql": "SELECT\n  home_store\n  , SUM(__net_sales_cents) AS net_sales_cents\nFROM (\n  SELECT\n    home_store_id AS home_store\n    , CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END AS __net_sales_cents\n  FROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\n  WHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-07-01' AND '2026-07-31'\n) subq_5\nGROUP BY\n  home_store",
+        "columns": [
+          "home_store",
+          "net_sales_cents"
+        ],
+        "rows": [
+          [
+            "S03",
+            9000
+          ],
+          [
+            "S01",
+            4500
+          ],
+          [
+            "S02",
+            18000
+          ]
+        ],
+        "seconds": 0.031,
+        "units": {
+          "net_sales_cents": "cents"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "基于本周合成测试库中当前客户青禾的会员账户范围，统计 2026 年 7 月按会员归属门店分组的净销售额：会员归属门店 S03 为 90.00 元，S01 为 45.00 元，S02 为 180.00 元；上述门店合计 315.00 元。口径为 paid 订单实付金额减退款后的净额，取消单不计，并按原订单下单日期归属到 2026 年 7 月；此处统计的是会员归属门店，不是订单成交门店。",
+        "question": "2026 年 7 月青禾按会员归属门店统计的净销售额是多少？",
+        "trace_id": "a4de6d1c-89c7-4da2-8157-72559b2b36e1",
+        "elapsed_seconds": 10.219,
+        "model_usage": {
+          "prompt_tokens": 12483,
+          "completion_tokens": 1067,
+          "total_tokens": 13550
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c14-zero-and-null",
+      "question": "2026 年 5 月青禾的有效订单数和有效订单均额是多少？",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "valid_order_count",
+            "avg_order_value"
+          ],
+          "start": "2026-05-01",
+          "end": "2026-06-01",
+          "group_by": [],
+          "filters": []
+        },
+        "columns": [
+          "valid_order_count",
+          "avg_order_value"
+        ],
+        "rows": [
+          [
+            0,
+            null
+          ]
+        ],
+        "units": {
+          "valid_order_count": "count",
+          "avg_order_value": "cents_per_order"
+        }
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "valid_order_count",
+            "avg_order_value"
+          ],
+          "start": "2026-05-01",
+          "end": "2026-06-01",
+          "group_by": [],
+          "filters": []
+        },
+        "sql": "WITH sma_10005_cte AS (\n  SELECT\n    DATE_TRUNC('day', ordered_at) AS metric_time__day\n    , CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN 1 ELSE 0 END AS __valid_order_count\n    , CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END AS __net_sales_cents\n  FROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\n)\n\nSELECT\n  MAX(subq_8.valid_order_count) AS valid_order_count\n  , MAX(subq_15.avg_order_value) AS avg_order_value\nFROM (\n  SELECT\n    SUM(__valid_order_count) AS valid_order_count\n  FROM sma_10005_cte\n  WHERE metric_time__day BETWEEN '2026-05-01' AND '2026-05-31'\n) subq_8\nCROSS JOIN (\n  SELECT\n    CAST(SUM(__net_sales_cents) AS DOUBLE) / CAST(NULLIF(SUM(__valid_order_count), 0) AS DOUBLE) AS avg_order_value\n  FROM sma_10005_cte\n  WHERE metric_time__day BETWEEN '2026-05-01' AND '2026-05-31'\n) subq_15",
+        "columns": [
+          "valid_order_count",
+          "avg_order_value"
+        ],
+        "rows": [
+          [
+            0,
+            null
+          ]
+        ],
+        "seconds": 0.047,
+        "units": {
+          "valid_order_count": "count",
+          "avg_order_value": "cents_per_order"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "按当前青禾客户（CRM会员账户口径）统计，2026年5月1日至5月31日范围内，未应用门店筛选，也未按门店分组。有效订单数为0单；有效订单均额因有效订单数为0、分母为零而无法计算，属于未定义，不能视为0元。有效订单口径为已支付且实付金额减退款金额大于零的订单，取消和全退不计。",
+        "question": "2026 年 5 月青禾的有效订单数和有效订单均额是多少？",
+        "trace_id": "8b02164b-22a6-421f-9f62-7cecd3cecd32",
+        "elapsed_seconds": 9.953,
+        "model_usage": {
+          "prompt_tokens": 12559,
+          "completion_tokens": 879,
+          "total_tokens": 13438
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c15-paid-july",
+      "question": "2026 年 7 月青禾月末付费会员购买人数是多少？",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "monthly_paid_buyer_count"
+          ],
+          "start": "2026-07-01",
+          "end": "2026-08-01",
+          "group_by": [],
+          "filters": []
+        },
+        "columns": [
+          "monthly_paid_buyer_count"
+        ],
+        "rows": [
+          [
+            6
+          ]
+        ],
+        "units": {
+          "monthly_paid_buyer_count": "count"
+        }
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "monthly_paid_buyer_count"
+          ],
+          "start": "2026-07-01",
+          "end": "2026-08-01",
+          "group_by": [],
+          "filters": []
+        },
+        "sql": "SELECT\n  SUM(CASE WHEN monthly_paid_member_activity_id IS NOT NULL THEN 1 ELSE 0 END) AS monthly_paid_buyer_count\nFROM \"data\".\"main\".\"monthly_paid_member_activity\" monthly_paid_member_activity_src_10000\nWHERE DATE_TRUNC('day', activity_month) BETWEEN '2026-07-01' AND '2026-07-31'",
+        "columns": [
+          "monthly_paid_buyer_count"
+        ],
+        "rows": [
+          [
+            6
+          ]
+        ],
+        "seconds": 0.031,
+        "units": {
+          "monthly_paid_buyer_count": "count"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "2026年7月，青禾在当前统计范围内“月末付费会员购买人数”为 6 个 CRM 会员账户。口径为：2026-07-01 至 2026-07-31 整个自然月内至少有 1 笔有效订单，且在 7 月月末名下仍有有效的悦享年卡或家庭季卡；同一账户即使有多张符合范围的卡，也只计 1 个账户。该指标按完整自然月、全渠道、全门店汇总，不按门店或渠道拆分。",
+        "question": "2026 年 7 月青禾月末付费会员购买人数是多少？",
+        "trace_id": "8211b7ca-988a-42bb-93c0-28759d80c8fc",
+        "elapsed_seconds": 10.14,
+        "model_usage": {
+          "prompt_tokens": 12678,
+          "completion_tokens": 1062,
+          "total_tokens": 13740
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c16-paid-synonym",
+      "question": "8 月份（2026 年）青禾付费会员里在当月下过有效订单的有几个账户？",
+      "expected": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "monthly_paid_buyer_count"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "columns": [
+          "monthly_paid_buyer_count"
+        ],
+        "rows": [
+          [
+            6
+          ]
+        ],
+        "units": {
+          "monthly_paid_buyer_count": "count"
+        }
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "monthly_paid_buyer_count"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [],
+          "filters": []
+        },
+        "sql": "SELECT\n  SUM(CASE WHEN monthly_paid_member_activity_id IS NOT NULL THEN 1 ELSE 0 END) AS monthly_paid_buyer_count\nFROM \"data\".\"main\".\"monthly_paid_member_activity\" monthly_paid_member_activity_src_10000\nWHERE DATE_TRUNC('day', activity_month) BETWEEN '2026-08-01' AND '2026-08-31'",
+        "columns": [
+          "monthly_paid_buyer_count"
+        ],
+        "rows": [
+          [
+            6
+          ]
+        ],
+        "seconds": 0.031,
+        "units": {
+          "monthly_paid_buyer_count": "count"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "2026 年 8 月，青禾范围内共有 6 个账户符合条件：这些账户在当月至少有一笔有效订单，并且在 8 月月末名下存在有效的悦享年卡或家庭季卡；按账户去重计数，不按卡重复计算。统计口径为完整自然月、全渠道、全门店汇总，不按门店或渠道拆分。",
+        "question": "8 月份（2026 年）青禾付费会员里在当月下过有效订单的有几个账户？",
+        "trace_id": "b4bf4aa3-6839-4970-911d-fc46cec180af",
+        "elapsed_seconds": 10.266,
+        "model_usage": {
+          "prompt_tokens": 12692,
+          "completion_tokens": 914,
+          "total_tokens": 13606
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c17-ambiguous-store",
+      "question": "按门店看青禾 2026 年 7 月的净销售额是多少？",
+      "expected": {
+        "status": "clarify"
+      },
+      "actual": {
+        "status": "ok",
+        "intent": {
+          "metrics": [
+            "net_sales_cents"
+          ],
+          "start": "2026-07-01",
+          "end": "2026-08-01",
+          "group_by": [
+            "store"
+          ],
+          "filters": []
+        },
+        "sql": "SELECT\n  store\n  , SUM(__net_sales_cents) AS net_sales_cents\nFROM (\n  SELECT\n    store_id AS store\n    , CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END AS __net_sales_cents\n  FROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\n  WHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-07-01' AND '2026-07-31'\n) subq_5\nGROUP BY\n  store",
+        "columns": [
+          "store",
+          "net_sales_cents"
+        ],
+        "rows": [
+          [
+            "S02",
+            10000
+          ],
+          [
+            "S03",
+            9000
+          ],
+          [
+            "S01",
+            12500
+          ]
+        ],
+        "seconds": 0.016,
+        "units": {
+          "net_sales_cents": "cents"
+        },
+        "data_version": "qinghe-w03-20260923-small",
+        "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+        "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+        "answer": "在青禾当前客户范围内，按订单成交门店统计 2026 年 7 月净销售额：S01 为 125.00 元，S02 为 100.00 元，S03 为 90.00 元。口径为已支付订单实付金额减退款，取消单不计，并按原订单下单日期归属；本次结果列出这三个门店分组。",
+        "question": "按门店看青禾 2026 年 7 月的净销售额是多少？",
+        "trace_id": "28d4ec18-0476-49aa-8669-c9067070ed6c",
+        "elapsed_seconds": 8.218,
+        "model_usage": {
+          "prompt_tokens": 12477,
+          "completion_tokens": 714,
+          "total_tokens": 13191
+        },
+        "model_calls_with_usage": 2
+      },
+      "comparison": {
+        "passed": false,
+        "differences": [
+          {
+            "path": "status",
+            "expected": "clarify",
+            "actual": "ok"
+          }
+        ]
+      }
+    },
+    {
+      "id": "c18-no-period",
+      "question": "青禾的有效订单数是多少？",
+      "expected": {
+        "status": "clarify"
+      },
+      "actual": {
+        "status": "clarify",
+        "reason": "请提供有效订单数的统计时间范围（开始和结束日期）。“青禾”按当前数据集处理，不会自动作为门店筛选条件。",
+        "intent": {
+          "status": "clarify",
+          "reason": "请提供有效订单数的统计时间范围（开始和结束日期）。“青禾”按当前数据集处理，不会自动作为门店筛选条件。",
+          "metrics": [
+            "valid_order_count"
+          ],
+          "group_by": [],
+          "filters": []
+        },
+        "question": "青禾的有效订单数是多少？",
+        "trace_id": "d8d11d49-8236-4bfe-9125-137252e55527",
+        "elapsed_seconds": 3.531,
+        "model_usage": {
+          "prompt_tokens": 11403,
+          "completion_tokens": 511,
+          "total_tokens": 11914
+        },
+        "model_calls_with_usage": 1
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c19-out-of-coverage",
+      "question": "2026 年 9 月青禾的净销售额是多少？",
+      "expected": {
+        "status": "unsupported"
+      },
+      "actual": {
+        "status": "unsupported",
+        "reason": "请求的 2026 年 9 月净销售额超出数据覆盖范围：当前数据仅覆盖至 2026-09-01，无法覆盖 2026-09-01 至 2026-10-01 的完整月份。",
+        "intent": {
+          "status": "unsupported",
+          "reason": "请求的 2026 年 9 月净销售额超出数据覆盖范围：当前数据仅覆盖至 2026-09-01，无法覆盖 2026-09-01 至 2026-10-01 的完整月份。",
+          "metrics": [
+            "net_sales_cents"
+          ],
+          "start": "2026-09-01",
+          "end": "2026-10-01",
+          "group_by": [],
+          "filters": []
+        },
+        "question": "2026 年 9 月青禾的净销售额是多少？",
+        "trace_id": "9e20a458-e35c-4ae7-bbdc-8eba26e33d0c",
+        "elapsed_seconds": 5.609,
+        "model_usage": {
+          "prompt_tokens": 11411,
+          "completion_tokens": 985,
+          "total_tokens": 12396
+        },
+        "model_calls_with_usage": 1
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c20-paid-half-month",
+      "question": "2026 年 8 月 1 日到 8 月 15 日青禾月末付费会员购买人数是多少？",
+      "expected": {
+        "status": "unsupported"
+      },
+      "actual": {
+        "status": "unsupported",
+        "reason": "“月末付费会员购买人数”仅支持完整自然月、全渠道、全门店口径，也就是在自然月整月范围内统计，不支持 2026-08-01 至 2026-08-15 这种半月区间。如果希望继续查询，建议改为完整自然月 2026-08-01 至 2026-09-01（end 为不包含），且不做门店或渠道筛选。",
+        "intent": {
+          "status": "unsupported",
+          "reason": "“月末付费会员购买人数”仅支持完整自然月、全渠道、全门店口径，也就是在自然月整月范围内统计，不支持 2026-08-01 至 2026-08-15 这种半月区间。如果希望继续查询，建议改为完整自然月 2026-08-01 至 2026-09-01（end 为不包含），且不做门店或渠道筛选。",
+          "metrics": [
+            "monthly_paid_buyer_count"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-08-16",
+          "group_by": [],
+          "filters": []
+        },
+        "question": "2026 年 8 月 1 日到 8 月 15 日青禾月末付费会员购买人数是多少？",
+        "trace_id": "94e360bc-453b-43ff-ad7c-3786e6d9839e",
+        "elapsed_seconds": 2.141,
+        "model_usage": {
+          "prompt_tokens": 11426,
+          "completion_tokens": 254,
+          "total_tokens": 11680
+        },
+        "model_calls_with_usage": 1
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    },
+    {
+      "id": "c21-paid-by-store",
+      "question": "2026 年 8 月青禾按成交门店拆分的月末付费会员购买人数是多少？",
+      "expected": {
+        "status": "unsupported"
+      },
+      "actual": {
+        "status": "unsupported",
+        "reason": "月末付费会员购买人数仅支持完整自然月、全渠道、全门店口径，不能按成交门店拆分；2026 年 8 月本身为完整自然月，但“按成交门店”超出该指标的查询约束。",
+        "intent": {
+          "status": "unsupported",
+          "reason": "月末付费会员购买人数仅支持完整自然月、全渠道、全门店口径，不能按成交门店拆分；2026 年 8 月本身为完整自然月，但“按成交门店”超出该指标的查询约束。",
+          "metrics": [
+            "monthly_paid_buyer_count"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-09-01",
+          "group_by": [
+            "store"
+          ],
+          "filters": []
+        },
+        "question": "2026 年 8 月青禾按成交门店拆分的月末付费会员购买人数是多少？",
+        "trace_id": "3cd6e60b-a3bb-420e-ba38-9e176ce38fd2",
+        "elapsed_seconds": 4.578,
+        "model_usage": {
+          "prompt_tokens": 11418,
+          "completion_tokens": 686,
+          "total_tokens": 12104
+        },
+        "model_calls_with_usage": 1
+      },
+      "comparison": {
+        "passed": true,
+        "differences": []
+      }
+    }
+  ]
+}

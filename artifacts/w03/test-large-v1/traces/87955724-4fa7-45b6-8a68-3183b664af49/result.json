@@ -1,0 +1,134 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "net_sales_cents"
+    ],
+    "start": "2026-07-01",
+    "end": "2026-08-01",
+    "group_by": [
+      "store"
+    ],
+    "filters": []
+  },
+  "sql": "SELECT\n  store\n  , SUM(__net_sales_cents) AS net_sales_cents\nFROM (\n  SELECT\n    store_id AS store\n    , CASE WHEN status = 'paid' THEN paid_cents - refund_cents ELSE 0 END AS __net_sales_cents\n  FROM \"data\".\"main\".\"orders_enriched\" orders_enriched_src_10000\n  WHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-07-01' AND '2026-07-31'\n) subq_5\nGROUP BY\n  store",
+  "columns": [
+    "store",
+    "net_sales_cents"
+  ],
+  "rows": [
+    [
+      "S04",
+      19582358
+    ],
+    [
+      "S16",
+      21268963
+    ],
+    [
+      "S11",
+      21317571
+    ],
+    [
+      "S22",
+      21360741
+    ],
+    [
+      "S21",
+      20758677
+    ],
+    [
+      "S20",
+      21720258
+    ],
+    [
+      "S12",
+      22321830
+    ],
+    [
+      "S17",
+      21412087
+    ],
+    [
+      "S23",
+      21497617
+    ],
+    [
+      "S19",
+      22883402
+    ],
+    [
+      "S05",
+      21459002
+    ],
+    [
+      "S24",
+      20946594
+    ],
+    [
+      "S15",
+      21232840
+    ],
+    [
+      "S08",
+      20145187
+    ],
+    [
+      "S07",
+      20574896
+    ],
+    [
+      "S03",
+      21050781
+    ],
+    [
+      "S14",
+      21951630
+    ],
+    [
+      "S01",
+      20327016
+    ],
+    [
+      "S10",
+      20940990
+    ],
+    [
+      "S06",
+      20855320
+    ],
+    [
+      "S09",
+      22062485
+    ],
+    [
+      "S18",
+      21997703
+    ],
+    [
+      "S02",
+      22373196
+    ],
+    [
+      "S13",
+      21631526
+    ]
+  ],
+  "seconds": 0.047,
+  "units": {
+    "net_sales_cents": "cents"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+  "answer": "统计范围：青禾当前客户数据，2026年7月全月，按订单成交门店分组。净销售额口径为 paid 订单实付金额减退款，取消单不计，并按原订单下单日期归属；金额已从分换算为元。\n\n各门店净销售额：\nS01：203,270.16 元\nS02：223,731.96 元\nS03：210,507.81 元\nS04：195,823.58 元\nS05：214,590.02 元\nS06：208,553.20 元\nS07：205,748.96 元\nS08：201,451.87 元\nS09：220,624.85 元\nS10：209,409.90 元\nS11：213,175.71 元\nS12：223,218.30 元\nS13：216,315.26 元\nS14：219,516.30 元\nS15：212,328.40 元\nS16：212,689.63 元\nS17：214,120.87 元\nS18：219,977.03 元\nS19：228,834.02 元\nS20：217,202.58 元\nS21：207,586.77 元\nS22：213,607.41 元\nS23：214,976.17 元\nS24：209,465.94 元\n\n上述门店合计净销售额为 5,116,726.70 元。结果来自合成测试库，仅用于测试；本次以门店编号列示，未返回门店名称。",
+  "question": "按门店看青禾 2026 年 7 月的净销售额是多少？",
+  "trace_id": "87955724-4fa7-45b6-8a68-3183b664af49",
+  "elapsed_seconds": 21.875,
+  "model_usage": {
+    "prompt_tokens": 313247,
+    "completion_tokens": 2786,
+    "total_tokens": 316033
+  },
+  "model_calls_with_usage": 2
+}

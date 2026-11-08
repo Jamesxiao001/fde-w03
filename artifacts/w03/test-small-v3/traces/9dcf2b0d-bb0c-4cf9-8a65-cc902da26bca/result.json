@@ -1,0 +1,26 @@
+{
+  "status": "unsupported",
+  "reason": "月末付费会员购买人数仅支持完整自然月、全渠道、全门店口径，不支持按成交门店拆分。",
+  "intent": {
+    "status": "unsupported",
+    "reason": "月末付费会员购买人数仅支持完整自然月、全渠道、全门店口径，不支持按成交门店拆分。",
+    "metrics": [
+      "monthly_paid_buyer_count"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [
+      "store"
+    ],
+    "filters": []
+  },
+  "question": "2026 年 8 月青禾按成交门店拆分的月末付费会员购买人数是多少？",
+  "trace_id": "9dcf2b0d-bb0c-4cf9-8a65-cc902da26bca",
+  "elapsed_seconds": 3.812,
+  "model_usage": {
+    "prompt_tokens": 13152,
+    "completion_tokens": 522,
+    "total_tokens": 13674
+  },
+  "model_calls_with_usage": 1
+}

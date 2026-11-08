@@ -1,0 +1,50 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "order_count",
+      "paid_order_count",
+      "valid_order_count",
+      "cancelled_order_count"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  COUNT(DISTINCT order_id) AS order_count\n  , COUNT(DISTINCT CASE WHEN status = 'paid' THEN order_id END) AS paid_order_count\n  , COUNT(DISTINCT CASE WHEN status = 'paid' AND paid_cents - refund_cents > 0 THEN order_id END) AS valid_order_count\n  , COUNT(DISTINCT CASE WHEN status = 'cancelled' THEN order_id END) AS cancelled_order_count\nFROM \"data\".\"main\".\"order_facts\" order_facts_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+  "columns": [
+    "order_count",
+    "paid_order_count",
+    "valid_order_count",
+    "cancelled_order_count"
+  ],
+  "rows": [
+    [
+      34306,
+      31564,
+      29933,
+      2742
+    ]
+  ],
+  "seconds": 0.141,
+  "units": {
+    "order_count": "count",
+    "paid_order_count": "count",
+    "valid_order_count": "count",
+    "cancelled_order_count": "count"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "2d0f316b286de6e5958ff9d5c09e21fc8bf0ca11e598484f9526f1960c9ddaff",
+  "answer": "青禾在 2026 年 8 月（按下单日期统计，覆盖 8 月 1 日至 8 月 31 日）的订单数分别为：创建订单数 34,306 单；支付订单数 31,564 单；有效订单数 29,933 单；取消订单数 2,742 单。口径说明：创建订单数按每个订单号计一次并包含取消单；支付订单数包含后来全部退款的订单；有效订单数要求已支付且实付金额减退款金额大于零，取消和全退不计；取消订单数按取消订单统计。本次结果属于当前已加载的青禾测试数据范围，未按门店筛选或分组；以上均为订单计数，不涉及金额换算。",
+  "question": "2026 年 8 月青禾的创建订单数、支付订单数、有效订单数和取消订单数分别是多少？",
+  "trace_id": "5ab722ce-b21e-4ecd-a8a9-1002a18c47b3",
+  "elapsed_seconds": 14.812,
+  "model_usage": {
+    "prompt_tokens": 315244,
+    "completion_tokens": 979,
+    "total_tokens": 316223
+  },
+  "model_calls_with_usage": 2
+}

@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "metrics_compiled": [
+    "monthly_paid_avg_order_value",
+    "monthly_paid_buyer_count",
+    "monthly_paid_order_count",
+    "monthly_paid_repeat_buyer_count",
+    "monthly_paid_repeat_rate",
+    "monthly_paid_sales_cents"
+  ],
+  "validator": "SemanticManifestValidator; native explain + DuckDB EXPLAIN"
+}

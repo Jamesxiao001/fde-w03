@@ -1,0 +1,224 @@
+{
+  "passed": true,
+  "items": [
+    {
+      "model": "orders_enriched",
+      "check": "primary_key",
+      "columns": [
+        "order_id"
+      ],
+      "rows": 48,
+      "null_rows": 0,
+      "duplicate_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "orders_enriched",
+      "entity": "member",
+      "target": "members",
+      "check": "foreign_key",
+      "unmatched_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "orders_enriched",
+      "entity": "store",
+      "target": "stores",
+      "check": "foreign_key",
+      "unmatched_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "orders_enriched",
+      "entity": "home_store",
+      "target": "home_stores",
+      "check": "foreign_key",
+      "unmatched_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "members",
+      "check": "primary_key",
+      "columns": [
+        "member_id"
+      ],
+      "rows": 20,
+      "null_rows": 0,
+      "duplicate_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "members",
+      "entity": "home_store",
+      "target": "home_stores",
+      "check": "foreign_key",
+      "unmatched_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "stores",
+      "check": "primary_key",
+      "columns": [
+        "store_id"
+      ],
+      "rows": 3,
+      "null_rows": 0,
+      "duplicate_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "home_stores",
+      "check": "primary_key",
+      "columns": [
+        "store_id"
+      ],
+      "rows": 3,
+      "null_rows": 0,
+      "duplicate_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "member_first_valid_orders",
+      "check": "primary_key",
+      "columns": [
+        "member_id"
+      ],
+      "rows": 18,
+      "null_rows": 0,
+      "duplicate_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "member_first_valid_orders",
+      "check": "primary_key",
+      "columns": [
+        "first_order_id"
+      ],
+      "rows": 18,
+      "null_rows": 0,
+      "duplicate_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "member_first_valid_orders",
+      "entity": "member",
+      "target": "members",
+      "check": "foreign_key",
+      "unmatched_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "member_first_valid_orders",
+      "entity": "store",
+      "target": "stores",
+      "check": "foreign_key",
+      "unmatched_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "member_first_valid_orders",
+      "entity": "home_store",
+      "target": "home_stores",
+      "check": "foreign_key",
+      "unmatched_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "valid_order_sequence",
+      "check": "primary_key",
+      "columns": [
+        "order_id"
+      ],
+      "rows": 42,
+      "null_rows": 0,
+      "duplicate_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "valid_order_sequence",
+      "entity": "member",
+      "target": "members",
+      "check": "foreign_key",
+      "unmatched_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "valid_order_sequence",
+      "entity": "store",
+      "target": "stores",
+      "check": "foreign_key",
+      "unmatched_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "valid_order_sequence",
+      "entity": "home_store",
+      "target": "home_stores",
+      "check": "foreign_key",
+      "unmatched_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "monthly_member_activity",
+      "check": "primary_key",
+      "columns": [
+        "member_id",
+        "activity_month"
+      ],
+      "rows": 29,
+      "null_rows": 0,
+      "duplicate_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "monthly_member_activity",
+      "check": "primary_key",
+      "columns": [
+        "monthly_member_activity_id"
+      ],
+      "rows": 29,
+      "null_rows": 0,
+      "duplicate_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "monthly_member_activity",
+      "entity": "member",
+      "target": "members",
+      "check": "foreign_key",
+      "unmatched_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "monthly_paid_member_activity",
+      "check": "primary_key",
+      "columns": [
+        "monthly_paid_member_activity_id"
+      ],
+      "rows": 13,
+      "null_rows": 0,
+      "duplicate_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "monthly_paid_member_activity",
+      "check": "primary_key",
+      "columns": [
+        "member_id",
+        "activity_month"
+      ],
+      "rows": 13,
+      "null_rows": 0,
+      "duplicate_rows": 0,
+      "passed": true
+    },
+    {
+      "model": "monthly_paid_member_activity",
+      "entity": "member",
+      "target": "members",
+      "check": "foreign_key",
+      "unmatched_rows": 0,
+      "passed": true
+    }
+  ]
+}

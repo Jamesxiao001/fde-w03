@@ -1,0 +1,38 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "monthly_paid_repeat_rate"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  CAST(SUM(CASE WHEN valid_order_count >= 2 THEN 1 ELSE 0 END) AS DOUBLE) / CAST(NULLIF(SUM(CASE WHEN monthly_paid_member_activity_id IS NOT NULL THEN 1 ELSE 0 END), 0) AS DOUBLE) AS monthly_paid_repeat_rate\nFROM \"data\".\"main\".\"monthly_paid_member_activity\" monthly_paid_member_activity_src_10000\nWHERE DATE_TRUNC('day', activity_month) BETWEEN '2026-08-01' AND '2026-08-31'",
+  "columns": [
+    "monthly_paid_repeat_rate"
+  ],
+  "rows": [
+    [
+      0.4461037197936465
+    ]
+  ],
+  "seconds": 0.062,
+  "units": {
+    "monthly_paid_repeat_rate": "ratio"
+  },
+  "data_version": "qinghe-w03-20260923-large",
+  "data_sha256": "0074e7f764c63e836617aecb0e217aa3b5cc0cf9ede557179ad46b077dcf8ba8",
+  "catalog_sha256": "f516a480326aadde2d294b7ed55da7792e1b29f1234bc09a8096ea113e8a5ec9",
+  "answer": "2026年8月青禾付费会员复购率为44.61%。统计范围为2026年8月完整自然月，按青禾CRM会员账户口径，在当前合成测试库的全渠道、全门店汇总计算；口径为月末最后一天账户名下存在有效悦享年卡或家庭季卡的付费会员复购率。本次结果只返回比率，未展示复购人数和分母人数明细；该指标仅适用于总部运营月报，不支持按门店或渠道拆分下钻。",
+  "question": "看一下 2026 年 8 月青禾付费会员的复购率。",
+  "trace_id": "6dd19e93-8a71-496b-a379-96541ee4d2cb",
+  "elapsed_seconds": 16.297,
+  "model_usage": {
+    "prompt_tokens": 313270,
+    "completion_tokens": 1277,
+    "total_tokens": 314547
+  },
+  "model_calls_with_usage": 2
+}

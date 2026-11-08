@@ -1,0 +1,50 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "refund_amount_rate",
+      "cancel_rate",
+      "refund_order_rate",
+      "discount_rate"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  CAST(SUM(CASE WHEN status = 'paid' THEN refund_cents ELSE 0 END) AS DOUBLE) / CAST(NULLIF(SUM(CASE WHEN status = 'paid' THEN paid_cents ELSE 0 END), 0) AS DOUBLE) AS refund_amount_rate\n  , CAST(SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) AS DOUBLE) / CAST(NULLIF(SUM(1), 0) AS DOUBLE) AS cancel_rate\n  , CAST(SUM(CASE WHEN status = 'paid' AND refund_cents > 0 THEN 1 ELSE 0 END) AS DOUBLE) / CAST(NULLIF(SUM(CASE WHEN status = 'paid' THEN 1 ELSE 0 END), 0) AS DOUBLE) AS refund_order_rate\n  , CAST(SUM(CASE WHEN status = 'paid' THEN gross_cents - paid_cents ELSE 0 END) AS DOUBLE) / CAST(NULLIF(SUM(CASE WHEN status = 'paid' THEN gross_cents ELSE 0 END), 0) AS DOUBLE) AS discount_rate\nFROM \"data\".\"main\".\"orders\" orders_src_10000\nWHERE DATE_TRUNC('day', ordered_at) BETWEEN '2026-08-01' AND '2026-08-31'",
+  "columns": [
+    "refund_amount_rate",
+    "cancel_rate",
+    "refund_order_rate",
+    "discount_rate"
+  ],
+  "rows": [
+    [
+      0.15749685006299874,
+      0.0625,
+      0.13333333333333333,
+      0.041851106639839035
+    ]
+  ],
+  "seconds": 0.047,
+  "units": {
+    "refund_amount_rate": "ratio",
+    "cancel_rate": "ratio",
+    "refund_order_rate": "ratio",
+    "discount_rate": "ratio"
+  },
+  "data_version": "qinghe-w03-20260923-small",
+  "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+  "catalog_sha256": "8ea06edeaed98ebb4be2aec3fef0c1d457c85aaacf522fd1b2fd3dcc75b4d175",
+  "answer": "青禾当前已加载数据范围内，2026 年 8 月整月的统计结果为：退款金额占比 15.75%，取消率 6.25%，退款订单率 13.33%，优惠率 4.19%。口径分别为：退款金额/实付金额、取消订单数/创建订单数、退款订单数/支付订单数、优惠金额/支付订单原价金额。统计单位为 CRM 会员账户，未按门店或地区拆分；本次为合成测试数据，结果仅用于测试验证。",
+  "question": "2026 年 8 月青禾的退款金额占比、取消率、退款订单率和优惠率是多少？",
+  "trace_id": "a4b08561-cd77-4d7a-905d-abfe0262dc3b",
+  "elapsed_seconds": 9.266,
+  "model_usage": {
+    "prompt_tokens": 14931,
+    "completion_tokens": 773,
+    "total_tokens": 15704
+  },
+  "model_calls_with_usage": 2
+}

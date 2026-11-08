@@ -1,0 +1,38 @@
+{
+  "status": "ok",
+  "intent": {
+    "metrics": [
+      "monthly_paid_buyer_count"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-09-01",
+    "group_by": [],
+    "filters": []
+  },
+  "sql": "SELECT\n  COUNT(DISTINCT member_id) AS monthly_paid_buyer_count\nFROM \"data\".\"main\".\"paid_member_month_orders\" paid_member_month_orders_src_10000\nWHERE DATE_TRUNC('month', activity_date) BETWEEN '2026-08-01' AND '2026-08-31'",
+  "columns": [
+    "monthly_paid_buyer_count"
+  ],
+  "rows": [
+    [
+      6
+    ]
+  ],
+  "seconds": 0.031,
+  "units": {
+    "monthly_paid_buyer_count": "count"
+  },
+  "data_version": "qinghe-w03-20260923-small",
+  "data_sha256": "8a295969ec24556ebd7f818506633919e71f840fc86488d53efc185f9768cfe6",
+  "catalog_sha256": "8ea06edeaed98ebb4be2aec3fef0c1d457c85aaacf522fd1b2fd3dcc75b4d175",
+  "answer": "2026 年 8 月，青禾符合付费会员资格的 CRM 会员账户中，当月有至少一笔有效订单的不同账户数为 6 个。统计口径为完整自然月、全渠道、全门店；付费资格按 8 月月末最后一天判断，账户名下需有有效的悦享年卡或家庭季卡，异业联名卡和体验卡不计入，且不按会员等级或购卡金额判断。同一账户多张有效卡或多笔订单不重复计人；未要求订单发生当天也已具备付费资格。",
+  "question": "8 月份（2026 年）青禾付费会员里在当月下过有效订单的有几个账户？",
+  "trace_id": "c507e4c4-5688-4fb7-baea-223284337759",
+  "elapsed_seconds": 10.234,
+  "model_usage": {
+    "prompt_tokens": 15175,
+    "completion_tokens": 792,
+    "total_tokens": 15967
+  },
+  "model_calls_with_usage": 2
+}
